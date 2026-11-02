@@ -42,6 +42,8 @@ struct QuickToggleFeatureStrings {
     let displayOffCaption: String
     let screenSaverTitle: String
     let screenSaverCaption: String
+    let hourlyBeepTitle: String
+    let hourlyBeepCaption: String
     let actionFailed: String
 }
 
@@ -104,6 +106,8 @@ extension QuickToggleFeatureStrings {
         displayOffCaption: "The Mac keeps running with the display off.",
         screenSaverTitle: "Start the screen saver",
         screenSaverCaption: "Starts right away, on every display.",
+        hourlyBeepTitle: "Beep on the hour",
+        hourlyBeepCaption: "Plays a short beep at the top of every hour.",
         actionFailed: "Could not complete."
     )
 
@@ -143,6 +147,8 @@ extension QuickToggleFeatureStrings {
         displayOffCaption: "O Mac continua funcionando com a tela apagada.",
         screenSaverTitle: "Iniciar o protetor de tela",
         screenSaverCaption: "Começa na hora, em todas as telas.",
+        hourlyBeepTitle: "Bipe a cada hora",
+        hourlyBeepCaption: "Toca um bipe curto no início de cada hora.",
         actionFailed: "Não foi possível concluir."
     )
 
@@ -182,6 +188,8 @@ extension QuickToggleFeatureStrings {
         displayOffCaption: "Mac ekran kapalıyken çalışmaya devam eder.",
         screenSaverTitle: "Ekran koruyucuyu başlat",
         screenSaverCaption: "Hemen, tüm ekranlarda başlar.",
+        hourlyBeepTitle: "Saat başında bip",
+        hourlyBeepCaption: "Her saat başında kısa bir bip sesi çalar.",
         actionFailed: "Tamamlanamadı."
     )
 
@@ -221,6 +229,8 @@ extension QuickToggleFeatureStrings {
         displayOffCaption: "Mac продолжает работать с выключенным экраном.",
         screenSaverTitle: "Запустить заставку",
         screenSaverCaption: "Запускается сразу на всех экранах.",
+        hourlyBeepTitle: "Сигнал каждый час",
+        hourlyBeepCaption: "Воспроизводит короткий сигнал в начале каждого часа.",
         actionFailed: "Не удалось выполнить."
     )
 
@@ -260,6 +270,8 @@ extension QuickToggleFeatureStrings {
         displayOffCaption: "El Mac sigue funcionando con la pantalla apagada.",
         screenSaverTitle: "Iniciar el salvapantallas",
         screenSaverCaption: "Empieza al momento, en todas las pantallas.",
+        hourlyBeepTitle: "Pitido cada hora en punto",
+        hourlyBeepCaption: "Reproduce un pitido corto al comienzo de cada hora.",
         actionFailed: "No se pudo completar."
     )
 
@@ -299,6 +311,8 @@ extension QuickToggleFeatureStrings {
         displayOffCaption: "Mac beží ďalej aj s vypnutou obrazovkou.",
         screenSaverTitle: "Spustiť šetrič obrazovky",
         screenSaverCaption: "Spustí sa hneď, na všetkých displejoch.",
+        hourlyBeepTitle: "Pípnutie každú celú hodinu",
+        hourlyBeepCaption: "Prehrá krátke pípnutie na začiatku každej hodiny.",
         actionFailed: "Nepodarilo sa dokončiť."
     )
 
@@ -338,6 +352,8 @@ extension QuickToggleFeatureStrings {
         displayOffCaption: "Der Mac läuft mit ausgeschaltetem Bildschirm weiter.",
         screenSaverTitle: "Bildschirmschoner starten",
         screenSaverCaption: "Startet sofort, auf allen Bildschirmen.",
+        hourlyBeepTitle: "Stündlicher Signalton",
+        hourlyBeepCaption: "Spielt zu jeder vollen Stunde einen kurzen Signalton.",
         actionFailed: "Konnte nicht abgeschlossen werden."
     )
 
@@ -377,6 +393,8 @@ extension QuickToggleFeatureStrings {
         displayOffCaption: "Le Mac continue de fonctionner écran éteint.",
         screenSaverTitle: "Lancer l’économiseur d’écran",
         screenSaverCaption: "Démarre aussitôt, sur tous les écrans.",
+        hourlyBeepTitle: "Bip à chaque heure",
+        hourlyBeepCaption: "Joue un bip bref au début de chaque heure.",
         actionFailed: "Impossible de terminer."
     )
 
@@ -416,6 +434,8 @@ extension QuickToggleFeatureStrings {
         displayOffCaption: "Il Mac continua a funzionare con lo schermo spento.",
         screenSaverTitle: "Avvia il salvaschermo",
         screenSaverCaption: "Parte subito, su tutti gli schermi.",
+        hourlyBeepTitle: "Bip a ogni ora",
+        hourlyBeepCaption: "Riproduce un breve bip all’inizio di ogni ora.",
         actionFailed: "Impossibile completare."
     )
 
@@ -455,6 +475,8 @@ extension QuickToggleFeatureStrings {
         displayOffCaption: "画面を消しても Mac は動き続けます。",
         screenSaverTitle: "スクリーンセーバを開始",
         screenSaverCaption: "すべてのディスプレイですぐに始まります。",
+        hourlyBeepTitle: "毎時ちょうどにビープ",
+        hourlyBeepCaption: "毎時0分に短いビープ音を再生します。",
         actionFailed: "完了できませんでした。"
     )
 
@@ -494,6 +516,8 @@ extension QuickToggleFeatureStrings {
         displayOffCaption: "화면이 꺼져도 Mac은 계속 작동합니다.",
         screenSaverTitle: "화면 보호기 시작",
         screenSaverCaption: "모든 디스플레이에서 바로 시작됩니다.",
+        hourlyBeepTitle: "정각 알림음",
+        hourlyBeepCaption: "매시 정각에 짧은 알림음을 재생합니다.",
         actionFailed: "완료할 수 없습니다."
     )
 
@@ -533,6 +557,8 @@ extension QuickToggleFeatureStrings {
         displayOffCaption: "显示器关闭后 Mac 继续运行。",
         screenSaverTitle: "启动屏幕保护程序",
         screenSaverCaption: "在所有显示器上立即启动。",
+        hourlyBeepTitle: "整点蜂鸣",
+        hourlyBeepCaption: "每小时整点播放一声短促的蜂鸣声。",
         actionFailed: "无法完成。"
     )
 
@@ -572,6 +598,8 @@ extension QuickToggleFeatureStrings {
         displayOffCaption: "螢幕關閉後 Mac 仍繼續運作。",
         screenSaverTitle: "啟動螢幕保護程式",
         screenSaverCaption: "在所有顯示器上立即啟動。",
+        hourlyBeepTitle: "整點嗶聲",
+        hourlyBeepCaption: "每小時整點播放一聲短促的嗶聲。",
         actionFailed: "無法完成。"
     )
 
@@ -611,6 +639,8 @@ extension QuickToggleFeatureStrings {
         displayOffCaption: "螢幕關閉後 Mac 仍繼續運作。",
         screenSaverTitle: "啟動螢幕保護程式",
         screenSaverCaption: "在所有顯示器上立即啟動。",
+        hourlyBeepTitle: "整點嗶聲",
+        hourlyBeepCaption: "每小時整點播放一聲短促的嗶聲。",
         actionFailed: "無法完成。"
     )
     static let uk = QuickToggleFeatureStrings(
@@ -649,6 +679,8 @@ extension QuickToggleFeatureStrings {
         displayOffCaption: "Mac продовжує працювати з вимкненим екраном.",
         screenSaverTitle: "Запустити зберігач екрана",
         screenSaverCaption: "Запускається одразу, на кожному дисплеї.",
+        hourlyBeepTitle: "Сигнал щогодини",
+        hourlyBeepCaption: "Відтворює короткий сигнал на початку кожної години.",
         actionFailed: "Не вдалося завершити."
     )
 }

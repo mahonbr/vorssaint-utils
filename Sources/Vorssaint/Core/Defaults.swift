@@ -383,6 +383,10 @@ enum DefaultsKey {
     static let panelToggleLockScreen = "panelToggleLockScreen"
     static let panelToggleDisplayOff = "panelToggleDisplayOff"
     static let panelToggleScreenSaver = "panelToggleScreenSaver"
+    static let panelToggleHourlyBeep = "panelToggleHourlyBeep"
+    // A standing switch, not a momentary action: the beep itself survives
+    // relaunches, like the mic mute flag.
+    static let hourlyBeepEnabled = "hourlyBeepEnabled"
 
     // System monitor — live metrics shown next to the menu bar icon (opt-in).
     static let menuBarCPU = "menuBarCPU"
@@ -1646,6 +1650,8 @@ enum Defaults {
         DefaultsKey.panelToggleLockScreen: true,
         DefaultsKey.panelToggleDisplayOff: true,
         DefaultsKey.panelToggleScreenSaver: true,
+        DefaultsKey.panelToggleHourlyBeep: true,
+        DefaultsKey.hourlyBeepEnabled: false,
         // Menu bar metrics start off (the icon stays clean) and are opt-in.
         // The panel shows every monitoring block by default; users hide what
         // they don't want.

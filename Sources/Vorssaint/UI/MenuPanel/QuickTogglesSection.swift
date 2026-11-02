@@ -71,6 +71,7 @@ struct QuickTogglesList: View {
     @ObservedObject private var toggles = QuickTogglesService.shared
     @ObservedObject private var micMute = MicMuteService.shared
     @ObservedObject private var brightness = BrightnessService.shared
+    @ObservedObject private var hourlyBeep = HourlyBeepService.shared
     @Environment(\.colorScheme) private var colorScheme
     @AppStorage(DefaultsKey.panelToggleDarkMode) private var showDarkMode = true
     @AppStorage(DefaultsKey.panelToggleKeyboardLight) private var showKeyboardLight = true
@@ -83,6 +84,7 @@ struct QuickTogglesList: View {
     @AppStorage(DefaultsKey.panelToggleLockScreen) private var showLockScreen = true
     @AppStorage(DefaultsKey.panelToggleDisplayOff) private var showDisplayOff = true
     @AppStorage(DefaultsKey.panelToggleScreenSaver) private var showScreenSaver = true
+    @AppStorage(DefaultsKey.panelToggleHourlyBeep) private var showHourlyBeep = true
     @AppStorage(DefaultsKey.panelToggleOrder) private var toggleOrderRaw = ""
 
     let editing: Bool
@@ -116,7 +118,8 @@ struct QuickTogglesList: View {
                     DefaultsKey.panelToggleEmptyTrash, DefaultsKey.panelToggleQuitAllApps,
                     DefaultsKey.panelToggleEjectDisks, DefaultsKey.panelToggleHiddenFiles,
                     DefaultsKey.panelToggleDesktopIcons, DefaultsKey.panelToggleLockScreen,
-                    DefaultsKey.panelToggleDisplayOff, DefaultsKey.panelToggleScreenSaver] {
+                    DefaultsKey.panelToggleDisplayOff, DefaultsKey.panelToggleScreenSaver,
+                    DefaultsKey.panelToggleHourlyBeep] {
             defaults.set(true, forKey: key)
         }
     }
@@ -161,6 +164,7 @@ struct QuickTogglesList: View {
         case .lockScreen: return $showLockScreen
         case .displayOff: return $showDisplayOff
         case .screenSaver: return $showScreenSaver
+        case .hourlyBeep: return $showHourlyBeep
         }
     }
 
@@ -307,6 +311,17 @@ struct QuickTogglesList: View {
                                         QuickTogglesService.shared.startScreenSaver()
                                     }
                                 })
+        case .hourlyBeep:
+            PanelToggleRow(title: strings.hourlyBeepTitle,
+                           caption: strings.hourlyBeepCaption,
+                           systemImage: "bell.badge",
+                           isOn: Binding(
+                               get: { hourlyBeep.isEnabled },
+                               set: { HourlyBeepService.shared.setEnabled($0) }
+                           ),
+                           isEditing: editing,
+                           showsDragHandle: true,
+                           visibility: visibilityBinding(item))
         }
     }
 

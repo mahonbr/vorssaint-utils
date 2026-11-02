@@ -10,7 +10,7 @@ enum QuickToggleAction: String, PanelOrderItem, Identifiable {
     // because it is the tab's headline action (issue request). Quit all sits
     // next to Empty the Trash (issue #855).
     case darkMode, keyboardLight, micMute, emptyTrash, quitAllApps, ejectDisks, hiddenFiles,
-         desktopIcons, lockScreen, displayOff, screenSaver
+         desktopIcons, lockScreen, displayOff, screenSaver, hourlyBeep
 
     var id: String { rawValue }
 

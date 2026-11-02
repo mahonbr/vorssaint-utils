@@ -1,0 +1,81 @@
+// SPDX-License-Identifier: GPL-3.0-or-later
+// Copyright (C) 2026 Vorssaint
+
+import AppKit
+
+/// A short chime at the top of every hour, the one quick toggle that is a
+/// standing switch rather than a one-click action. The timer lives only while
+/// the switch is on and the feature is installed; the stored flag survives
+/// relaunches, so an enabled beep resumes on its own at the next launch.
+/// Everything here runs on the main thread, where FeatureRuntime syncs.
+final class HourlyBeepService: ObservableObject {
+    static let shared = HourlyBeepService()
+
+    @Published private(set) var isEnabled = UserDefaults.standard.bool(forKey: DefaultsKey.hourlyBeepEnabled)
+
+    /// One timer at a time, always aiming at the next top of the hour.
+    private var timer: Timer?
+
+    /// Loaded once and replayed: decoding the clip on each hour would be the
+    /// only real cost of the feature. A bundle run without the resource (an
+    /// ad-hoc binary, a probe) falls back to the system alert sound.
+    private lazy var beep: NSSound? = {
+        guard let url = Bundle.main.url(forResource: "beep",
+                                        withExtension: "mp3",
+                                        subdirectory: "Sounds")
+        else { return nil }
+        return NSSound(contentsOf: url, byReference: false)
+    }()
+
+    private init() {}
+
+    /// Re-reads the stored switch and the feature gate; the binding runs it
+    /// at launch and again whenever the feature is installed or removed, so
+    /// an uninstall silences the chime on the spot without touching the flag.
+    func syncWithPreferences() {
+        isEnabled = UserDefaults.standard.bool(forKey: DefaultsKey.hourlyBeepEnabled)
+        syncTimer()
+    }
+
+    func setEnabled(_ enabled: Bool) {
+        guard enabled != isEnabled else { return }
+        UserDefaults.standard.set(enabled, forKey: DefaultsKey.hourlyBeepEnabled)
+        isEnabled = enabled
+        syncTimer()
+    }
+
+    private func syncTimer() {
+        if isEnabled, AppFeature.quickToggles.isAvailable {
+            scheduleNext()
+        } else {
+            timer?.invalidate()
+            timer = nil
+        }
+    }
+
+    /// One shot per chime, re-aimed after every ring: a repeating timer would
+    /// slowly drift off the hour, and recomputing costs nothing. Scheduled in
+    /// the common modes so a chime is not skipped while a menu stays tracked.
+    /// A Mac asleep through the hour rings once when it wakes, then re-arms.
+    private func scheduleNext() {
+        timer?.invalidate()
+        let now = Date()
+        let next = Calendar.current.dateInterval(of: .hour, for: now)?.end
+            ?? now.addingTimeInterval(3600)
+        let timer = Timer(fire: next, interval: 0, repeats: false) { [weak self] _ in
+            self?.ring()
+        }
+        self.timer = timer
+        RunLoop.main.add(timer, forMode: .common)
+    }
+
+    private func ring() {
+        timer = nil
+        if let beep {
+            beep.play()
+        } else {
+            NSSound.beep()
+        }
+        syncTimer()
+    }
+}

@@ -14,6 +14,7 @@ struct QuickToolsSettings: View {
     @ObservedObject private var cameraPreview = CameraPreviewService.shared
     @ObservedObject private var scratchpad = ScratchpadService.shared
     @ObservedObject private var brightness = BrightnessService.shared
+    @ObservedObject private var hourlyBeep = HourlyBeepService.shared
     @AppStorage(DefaultsKey.quickLauncherShortcutEnabled) private var launcherShortcutEnabled = true
     @AppStorage(DefaultsKey.micMuteShortcutEnabled) private var micShortcutEnabled = false
     @AppStorage(DefaultsKey.quitAppsShortcutEnabled) private var quitAllShortcutEnabled = false
@@ -91,6 +92,13 @@ struct QuickToolsSettings: View {
                                 .foregroundStyle(.secondary)
                                 .frame(width: 34, alignment: .trailing)
                         }
+                    }
+                    Toggle(isOn: Binding(
+                        get: { hourlyBeep.isEnabled },
+                        set: { HourlyBeepService.shared.setEnabled($0) }
+                    )) {
+                        Label(FeatureStrings.quickToggles(l10n.language).hourlyBeepTitle,
+                              systemImage: "bell.badge")
                     }
                     DiskExclusionsList()
                     Text(FeatureStrings.quickToggles(l10n.language).panelCaption)
