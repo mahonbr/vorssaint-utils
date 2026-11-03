@@ -56,25 +56,34 @@ final class HourlyBeepService: ObservableObject {
     /// One shot per chime, re-aimed after every ring: a repeating timer would
     /// slowly drift off the hour, and recomputing costs nothing. Scheduled in
     /// the common modes so a chime is not skipped while a menu stays tracked.
-    /// A Mac asleep through the hour rings once when it wakes, then re-arms.
     private func scheduleNext() {
         timer?.invalidate()
         let now = Date()
         let next = Calendar.current.dateInterval(of: .hour, for: now)?.end
             ?? now.addingTimeInterval(3600)
         let timer = Timer(fire: next, interval: 0, repeats: false) { [weak self] _ in
-            self?.ring()
+            self?.ring(due: next)
         }
         self.timer = timer
         RunLoop.main.add(timer, forMode: .common)
     }
 
-    private func ring() {
+    /// How far past the top of the hour a fire still counts as on time.
+    /// Run-loop tracking delays a chime by seconds at most; anything later
+    /// is a timer the system held while the Mac was asleep.
+    private static let lateTolerance: TimeInterval = 30
+
+    /// A chime is only worth playing while it still means "the top of the
+    /// hour": a Mac asleep at the moment fires its overdue timer on wake,
+    /// and a beep for an hour that already passed is noise, not a chime.
+    private func ring(due: Date) {
         timer = nil
-        if let beep {
-            beep.play()
-        } else {
-            NSSound.beep()
+        if Date().timeIntervalSince(due) <= Self.lateTolerance {
+            if let beep {
+                beep.play()
+            } else {
+                NSSound.beep()
+            }
         }
         syncTimer()
     }
