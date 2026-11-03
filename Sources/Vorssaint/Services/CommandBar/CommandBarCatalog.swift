@@ -994,6 +994,29 @@ enum CommandBarCatalog {
         }
     }
 
+    // MARK: - macOS Shortcuts
+
+    /// One row per shortcut the system's own tool reports, run through that
+    /// same tool, so a shortcut needs no Dock icon and no grant the app does
+    /// not already hold to be found and fired. The name is the whole
+    /// identity: it is what `shortcuts run` takes, what the person typed and
+    /// what a pin or a given name survives on.
+    static func shortcutEntries(_ names: [String],
+                                bar: CommandBarFeatureStrings) -> [CommandBarEntry] {
+        let icon: CommandBarEntry.Icon = CommandBarShortcuts.applicationIconPath
+            .map { CommandBarEntry.Icon.appIcon(path: $0) } ?? .symbol("square.2.layers.3d")
+        return names.map { name in
+            CommandBarEntry(
+                id: "shortcut.\(name)",
+                title: name,
+                subtitle: bar.sourceShortcuts,
+                keywords: bar.sourceShortcuts
+                    + " " + FeatureStrings.commandBar(.enUS).sourceShortcuts,
+                icon: icon,
+                run: { _ in CommandBarShortcuts.run(named: name) })
+        }
+    }
+
     // MARK: - Snippets
 
     private static func snippetEntries(_ bar: CommandBarFeatureStrings) -> [CommandBarEntry] {

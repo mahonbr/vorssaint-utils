@@ -197,6 +197,12 @@ final class CommandBarService: ObservableObject {
     private var macSettingsEntries: [CommandBarEntry] = [] { didSet { foldedSections[.macSettings] = nil } }
     private var macSettingsLanguage: AppLanguage?
     private var macSettingsLoading = false
+    /// macOS Shortcuts, one row per name the system's own tool reports. The
+    /// names are kept beside the rows so a rescan that changed nothing skips
+    /// the rebuild and its re-index.
+    private var shortcutEntries: [CommandBarEntry] = [] { didSet { foldedSections[.shortcuts] = nil } }
+    private var shortcutNames: [String] = []
+    private var shortcutsLoading = false
     /// Rows that act on what was selected when the bar opened. Read once per
     /// opening and thrown away on close: a selection is a moment, not a state.
     private var selectionEntries: [CommandBarEntry] = [] { didSet { foldedSections[.selection] = nil } }
@@ -306,6 +312,8 @@ final class CommandBarService: ObservableObject {
             emojiEntries = []
             macSettingsEntries = []
             macSettingsLanguage = nil
+            shortcutEntries = []
+            shortcutNames = []
             CommandBarSystemSettings.clearCache()
             presentationLifecycle.hide()
             menuOwnerPID = nil
@@ -428,6 +436,7 @@ final class CommandBarService: ObservableObject {
         refreshSystemAnswers(for: id)
         loadAppsIfNeeded(for: id)
         loadMacSettingsIfNeeded(for: id)
+        loadShortcutsIfNeeded(for: id)
         loadWindowsIfNeeded(for: id)
         loadMenusIfNeeded(for: id)
         loadSelection(for: id)
@@ -881,7 +890,7 @@ final class CommandBarService: ObservableObject {
                 loadAppsIfNeeded(for: presentationID)
                 return
             }
-            if CommandBarPreferences.source(ofRowID: key) == .macSettings {
+            if [.macSettings, .shortcuts].contains(CommandBarPreferences.source(ofRowID: key)) {
                 show(promptingFor: key)
                 return
             }
@@ -952,8 +961,8 @@ final class CommandBarService: ObservableObject {
 
     /// The chip order. Fixed, so the row never reshuffles under a pointer.
     private static let chipOrder: [CommandBarSource] = [
-        .actions, .apps, .clipboard, .windows, .menus, .settingsPages, .macSettings,
-        .snippets, .emoji, .folders, .links,
+        .actions, .apps, .shortcuts, .clipboard, .windows, .menus, .settingsPages,
+        .macSettings, .snippets, .emoji, .folders, .links,
     ]
 
     /// Walks the chips with the arrow keys. Only while the field is empty:
@@ -1027,6 +1036,12 @@ final class CommandBarService: ObservableObject {
         case .emoji:
             let hidden = hiddenCache
             return emojiEntries.contains { !hidden.contains($0.stableKey) }
+        case .shortcuts:
+            // A Mac can honestly have zero shortcuts, so the chip waits for
+            // the scan's answer instead of promising a category that stays
+            // empty. Rows already loaded still count, which keeps the chip
+            // from blinking out between openings.
+            return !shortcutEntries.isEmpty
         case .actions:
             // The same rule the content path applies: a chip that answered
             // with a narrower filter than the list behind it would hide a
@@ -1069,6 +1084,7 @@ final class CommandBarService: ObservableObject {
         case .windows: rows = windowEntries
         case .menus: rows = menuEntries
         case .emoji: rows = emojiEntries
+        case .shortcuts: rows = shortcutEntries
         case .uninstallApps: rows = uninstallEntries
         case .settingsPages, .snippets, .folders, .links:
             rows = catalog.filter { CommandBarPreferences.source(ofRowID: $0.id) == source }
@@ -1114,6 +1130,7 @@ final class CommandBarService: ObservableObject {
         case .files: return bar.sourceFiles
         case .links: return bar.linksTitle
         case .killProcess: return FeatureStrings.killProcess(L10n.shared.language).pageTitle
+        case .shortcuts: return bar.sourceShortcuts
         }
     }
 
@@ -1366,7 +1383,7 @@ final class CommandBarService: ObservableObject {
     /// The lists the pool is made of, in the order it builds them: what
     /// the Mac holds first, what is borrowed after.
     private enum PoolSection: CaseIterable {
-        case selection, killProcess, uninstallSelection, catalog, apps, uninstallApps, macSettings, windows, quit, menus, emoji
+        case selection, killProcess, uninstallSelection, catalog, apps, shortcuts, uninstallApps, macSettings, windows, quit, menus, emoji
     }
 
     private func entries(in section: PoolSection) -> [CommandBarEntry] {
@@ -1377,6 +1394,7 @@ final class CommandBarService: ObservableObject {
         case .killProcess: return killProcessEntries
         case .catalog: return catalog
         case .apps: return appEntries
+        case .shortcuts: return shortcutEntries
         case .macSettings: return macSettingsEntries
         case .windows: return windowEntries
         case .quit: return quitEntries
@@ -1615,7 +1633,8 @@ final class CommandBarService: ObservableObject {
             rows.append(contentsOf: selectionEntries)
         }
 
-        let offerable = (catalog + appEntries + macSettingsEntries + windowEntries).filter {
+        let offerable = (catalog + appEntries + shortcutEntries
+                         + macSettingsEntries + windowEntries).filter {
             !hidden.contains($0.stableKey) && allowed($0)
         }
         // On the empty bar there is no ranking to respect, so what the person
@@ -1695,7 +1714,8 @@ final class CommandBarService: ObservableObject {
         case .snippets: return bar.kindSnippet
         case .folders: return bar.kindFolder
         case .actions, .apps, .menus, .windows, .quitApps, .uninstallApps, .settingsPages,
-             .macSettings, .clipboard, .emoji, .calculator, .selection, .files, .killProcess:
+             .macSettings, .clipboard, .emoji, .calculator, .selection, .files, .killProcess,
+             .shortcuts:
             return entry.subtitle.isEmpty ? bar.everythingTitle : entry.subtitle
         }
     }
@@ -1708,7 +1728,7 @@ final class CommandBarService: ObservableObject {
     private static let kindLimits: [(prefix: String, limit: Int)] = [
         ("app.", 5), ("window.", 4), ("quit.", 3), ("menu.", 5), ("emoji.", 6),
         ("settings.", 4), ("macsettings.", 4), ("clipboard.", 4), ("snippet.", 4),
-        ("file.", 4),
+        ("file.", 4), ("shortcut.", 5),
         // Every switch answers to the same verb, so searching that verb would
         // otherwise fill the list with twenty rows that all read alike.
         ("toggle.", 5),
@@ -1880,7 +1900,7 @@ final class CommandBarService: ObservableObject {
         // What is selected comes first, so a tie goes to the thing the person
         // is already looking at.
         var pool = selectionEntries + uninstallSelectionEntries + catalog + appEntries
-            + macSettingsEntries + windowEntries
+            + shortcutEntries + macSettingsEntries + windowEntries
         // Two script names can overlap ("run" and "run report"). Only the
         // longest matching one is eligible; otherwise the shorter row can win
         // a ranking tie and Return runs a different file from the answer shown.
@@ -3018,6 +3038,40 @@ final class CommandBarService: ObservableObject {
                     startedBy: id, currentID: self.presentationID,
                     isVisible: self.isVisible) else { return }
                 if !self.runDeferredRowShortcutIfReady(for: id) { self.refreshResults() }
+            }
+        }
+    }
+
+    /// macOS Shortcuts, read off the main thread on every opening: a person
+    /// adds and removes them whenever they like, and the answer is a
+    /// directory's worth of text. The switch is honoured here rather than
+    /// only in the ranking, so a source nobody wants costs no scan at all.
+    private func loadShortcutsIfNeeded(for id: UUID) {
+        let pendingShortcut = deferredRowShortcut.key(for: id)
+            .map { CommandBarPreferences.source(ofRowID: $0) == .shortcuts } == true
+        guard (isEnabled(.shortcuts) || pendingShortcut), !shortcutsLoading else { return }
+        shortcutsLoading = true
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            let names = CommandBarShortcuts.installed()
+            DispatchQueue.main.async {
+                guard let self else { return }
+                self.shortcutsLoading = false
+                guard AppFeature.commandBar.isAvailable else { return }
+                let unchanged = names == self.shortcutNames
+                self.shortcutNames = names
+                if !unchanged {
+                    self.shortcutEntries = CommandBarCatalog.shortcutEntries(
+                        names, bar: FeatureStrings.commandBar(L10n.shared.language))
+                    self.indexEntries()
+                }
+                guard self.presentationLifecycle.acceptsSharedCacheCompletion(
+                    startedBy: id, currentID: self.presentationID,
+                    isVisible: self.isVisible) else { return }
+                if unchanged {
+                    _ = self.runDeferredRowShortcutIfReady(for: id)
+                } else if !self.runDeferredRowShortcutIfReady(for: id) {
+                    self.refreshResults()
+                }
             }
         }
     }

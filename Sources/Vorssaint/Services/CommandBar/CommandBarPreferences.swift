@@ -33,6 +33,8 @@ enum CommandBarSource: String, CaseIterable, Identifiable {
     /// is the one source that has to go and look.
     case files
     case killProcess
+    /// macOS Shortcuts, listed and run by the system's own `shortcuts` tool.
+    case shortcuts
 
     var id: String { rawValue }
 
@@ -60,6 +62,7 @@ enum CommandBarSource: String, CaseIterable, Identifiable {
         case .links: return "bookmark"
         case .files: return "doc.text.magnifyingglass"
         case .killProcess: return "xmark.octagon"
+        case .shortcuts: return "square.2.layers.3d"
         }
     }
 
@@ -84,6 +87,7 @@ enum CommandBarSource: String, CaseIterable, Identifiable {
         case .links: return "link."
         case .files: return "file."
         case .killProcess: return "kill."
+        case .shortcuts: return "shortcut."
         }
     }
 }
@@ -187,7 +191,8 @@ enum CommandBarPreferences {
         case .files, .settingsPages: return -40
         case .apps: return 80
         case .actions, .windows, .quitApps, .uninstallApps, .macSettings, .snippets,
-             .clipboard, .emoji, .folders, .answers, .calculator, .selection, .links, .killProcess:
+             .clipboard, .emoji, .folders, .answers, .calculator, .selection, .links, .killProcess,
+             .shortcuts:
             return 0
         }
     }
@@ -218,7 +223,7 @@ enum CommandBarPreferences {
         switch source(ofRowID: rowID) {
         case .menus, .windows, .clipboard, .selection, .files, .killProcess, .uninstallApps: return false
         case .actions, .apps, .quitApps, .settingsPages, .macSettings, .snippets, .emoji,
-             .folders, .answers, .calculator, .links:
+             .folders, .answers, .calculator, .links, .shortcuts:
             return true
         }
     }
@@ -297,7 +302,7 @@ enum CommandBarPreferences {
         case .menus, .quitApps, .uninstallApps, .clipboard, .emoji, .selection, .files, .killProcess:
             return false
         case .actions, .apps, .windows, .settingsPages, .macSettings, .snippets, .folders,
-             .links, .answers, .calculator:
+             .links, .answers, .calculator, .shortcuts:
             return true
         }
     }
@@ -355,7 +360,7 @@ enum CommandBarPreferences {
         switch source(ofRowID: rowID) {
         case .actions, .settingsPages, .snippets: return true
         case .apps, .uninstallApps, .menus, .windows, .quitApps, .macSettings, .clipboard, .emoji,
-             .folders, .answers, .calculator, .selection, .links, .files, .killProcess:
+             .folders, .answers, .calculator, .selection, .links, .files, .killProcess, .shortcuts:
             return false
         }
     }
