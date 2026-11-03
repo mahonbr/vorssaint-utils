@@ -141,7 +141,7 @@ struct QuickToolsSettings: View {
                         set: { InMeetingService.shared.setEnabled($0) }
                     )) {
                         Label(FeatureStrings.quickToggles(l10n.language).inMeetingTitle,
-                              systemImage: "video.fill")
+                              systemImage: "person.crop.circle.badge.clock")
                     }
                     Text(FeatureStrings.quickToggles(l10n.language).inMeetingCaption)
                         .font(.caption)

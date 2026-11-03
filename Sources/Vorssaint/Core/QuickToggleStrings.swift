@@ -50,11 +50,13 @@ struct QuickToggleFeatureStrings {
     let inMeetingActiveIcon: String
     let inMeetingActiveIconColor: String
     let inMeetingIconOpacity: String
+    let inMeetingTintRed: String
     let inMeetingTintOrange: String
+    let inMeetingTintYellow: String
     let inMeetingTintGreen: String
     let inMeetingTintBlue: String
     let inMeetingTintPurple: String
-    let inMeetingTintPink: String
+    let inMeetingTintGray: String
     let inMeetingTintNone: String
     let actionFailed: String
 }
@@ -126,11 +128,13 @@ extension QuickToggleFeatureStrings {
         inMeetingActiveIcon: "Active icon",
         inMeetingActiveIconColor: "Active icon color",
         inMeetingIconOpacity: "Icon transparency",
+        inMeetingTintRed: "Red",
         inMeetingTintOrange: "Orange",
+        inMeetingTintYellow: "Yellow",
         inMeetingTintGreen: "Green",
         inMeetingTintBlue: "Blue",
         inMeetingTintPurple: "Purple",
-        inMeetingTintPink: "Pink",
+        inMeetingTintGray: "Gray",
         inMeetingTintNone: "No color",
         actionFailed: "Could not complete."
     )
@@ -179,11 +183,13 @@ extension QuickToggleFeatureStrings {
         inMeetingActiveIcon: "Ícone ativo",
         inMeetingActiveIconColor: "Cor do ícone ativo",
         inMeetingIconOpacity: "Transparência do ícone",
+        inMeetingTintRed: "Vermelho",
         inMeetingTintOrange: "Laranja",
+        inMeetingTintYellow: "Amarelo",
         inMeetingTintGreen: "Verde",
         inMeetingTintBlue: "Azul",
         inMeetingTintPurple: "Roxo",
-        inMeetingTintPink: "Rosa",
+        inMeetingTintGray: "Cinza",
         inMeetingTintNone: "Sem cor",
         actionFailed: "Não foi possível concluir."
     )
@@ -232,11 +238,13 @@ extension QuickToggleFeatureStrings {
         inMeetingActiveIcon: "Etkin simge",
         inMeetingActiveIconColor: "Etkin simge rengi",
         inMeetingIconOpacity: "Simge saydamlığı",
+        inMeetingTintRed: "Kırmızı",
         inMeetingTintOrange: "Turuncu",
+        inMeetingTintYellow: "Sarı",
         inMeetingTintGreen: "Yeşil",
         inMeetingTintBlue: "Mavi",
         inMeetingTintPurple: "Mor",
-        inMeetingTintPink: "Pembe",
+        inMeetingTintGray: "Gri",
         inMeetingTintNone: "Renk yok",
         actionFailed: "Tamamlanamadı."
     )
@@ -285,11 +293,13 @@ extension QuickToggleFeatureStrings {
         inMeetingActiveIcon: "Активный значок",
         inMeetingActiveIconColor: "Цвет активного значка",
         inMeetingIconOpacity: "Прозрачность значка",
+        inMeetingTintRed: "Красный",
         inMeetingTintOrange: "Оранжевый",
+        inMeetingTintYellow: "Жёлтый",
         inMeetingTintGreen: "Зелёный",
         inMeetingTintBlue: "Синий",
         inMeetingTintPurple: "Фиолетовый",
-        inMeetingTintPink: "Розовый",
+        inMeetingTintGray: "Серый",
         inMeetingTintNone: "Без цвета",
         actionFailed: "Не удалось выполнить."
     )
@@ -338,11 +348,13 @@ extension QuickToggleFeatureStrings {
         inMeetingActiveIcon: "Icono activo",
         inMeetingActiveIconColor: "Color del icono activo",
         inMeetingIconOpacity: "Transparencia del icono",
+        inMeetingTintRed: "Rojo",
         inMeetingTintOrange: "Naranja",
+        inMeetingTintYellow: "Amarillo",
         inMeetingTintGreen: "Verde",
         inMeetingTintBlue: "Azul",
         inMeetingTintPurple: "Morado",
-        inMeetingTintPink: "Rosa",
+        inMeetingTintGray: "Gris",
         inMeetingTintNone: "Sin color",
         actionFailed: "No se pudo completar."
     )
@@ -391,11 +403,13 @@ extension QuickToggleFeatureStrings {
         inMeetingActiveIcon: "Ikona pri aktivite",
         inMeetingActiveIconColor: "Farba aktívnej ikony",
         inMeetingIconOpacity: "Priehľadnosť ikony",
+        inMeetingTintRed: "Červená",
         inMeetingTintOrange: "Oranžová",
+        inMeetingTintYellow: "Žltá",
         inMeetingTintGreen: "Zelená",
         inMeetingTintBlue: "Modrá",
         inMeetingTintPurple: "Fialová",
-        inMeetingTintPink: "Ružová",
+        inMeetingTintGray: "Sivá",
         inMeetingTintNone: "Bez farby",
         actionFailed: "Nepodarilo sa dokončiť."
     )
@@ -444,11 +458,13 @@ extension QuickToggleFeatureStrings {
         inMeetingActiveIcon: "Aktives Symbol",
         inMeetingActiveIconColor: "Farbe des aktiven Symbols",
         inMeetingIconOpacity: "Symboltransparenz",
+        inMeetingTintRed: "Rot",
         inMeetingTintOrange: "Orange",
+        inMeetingTintYellow: "Gelb",
         inMeetingTintGreen: "Grün",
         inMeetingTintBlue: "Blau",
         inMeetingTintPurple: "Lila",
-        inMeetingTintPink: "Pink",
+        inMeetingTintGray: "Grau",
         inMeetingTintNone: "Keine Farbe",
         actionFailed: "Konnte nicht abgeschlossen werden."
     )
@@ -497,11 +513,13 @@ extension QuickToggleFeatureStrings {
         inMeetingActiveIcon: "Icône active",
         inMeetingActiveIconColor: "Couleur de l’icône active",
         inMeetingIconOpacity: "Transparence de l’icône",
+        inMeetingTintRed: "Rouge",
         inMeetingTintOrange: "Orange",
+        inMeetingTintYellow: "Jaune",
         inMeetingTintGreen: "Vert",
         inMeetingTintBlue: "Bleu",
         inMeetingTintPurple: "Violet",
-        inMeetingTintPink: "Rose",
+        inMeetingTintGray: "Gris",
         inMeetingTintNone: "Sans couleur",
         actionFailed: "Impossible de terminer."
     )
@@ -550,11 +568,13 @@ extension QuickToggleFeatureStrings {
         inMeetingActiveIcon: "Icona attiva",
         inMeetingActiveIconColor: "Colore icona attiva",
         inMeetingIconOpacity: "Trasparenza dell’icona",
+        inMeetingTintRed: "Rosso",
         inMeetingTintOrange: "Arancione",
+        inMeetingTintYellow: "Giallo",
         inMeetingTintGreen: "Verde",
         inMeetingTintBlue: "Blu",
         inMeetingTintPurple: "Viola",
-        inMeetingTintPink: "Rosa",
+        inMeetingTintGray: "Grigio",
         inMeetingTintNone: "Nessun colore",
         actionFailed: "Impossibile completare."
     )
@@ -603,11 +623,13 @@ extension QuickToggleFeatureStrings {
         inMeetingActiveIcon: "使用中のアイコン",
         inMeetingActiveIconColor: "アクティブ時のアイコン色",
         inMeetingIconOpacity: "アイコンの透明度",
+        inMeetingTintRed: "赤",
         inMeetingTintOrange: "オレンジ",
+        inMeetingTintYellow: "黄色",
         inMeetingTintGreen: "緑",
         inMeetingTintBlue: "青",
         inMeetingTintPurple: "紫",
-        inMeetingTintPink: "ピンク",
+        inMeetingTintGray: "グレー",
         inMeetingTintNone: "色なし",
         actionFailed: "完了できませんでした。"
     )
@@ -656,11 +678,13 @@ extension QuickToggleFeatureStrings {
         inMeetingActiveIcon: "활성 아이콘",
         inMeetingActiveIconColor: "활성 상태 아이콘 색상",
         inMeetingIconOpacity: "아이콘 투명도",
+        inMeetingTintRed: "빨간색",
         inMeetingTintOrange: "주황색",
+        inMeetingTintYellow: "노란색",
         inMeetingTintGreen: "녹색",
         inMeetingTintBlue: "파란색",
         inMeetingTintPurple: "보라색",
-        inMeetingTintPink: "분홍색",
+        inMeetingTintGray: "회색",
         inMeetingTintNone: "없음",
         actionFailed: "완료할 수 없습니다."
     )
@@ -709,11 +733,13 @@ extension QuickToggleFeatureStrings {
         inMeetingActiveIcon: "活跃图标",
         inMeetingActiveIconColor: "启用时图标颜色",
         inMeetingIconOpacity: "图标透明度",
+        inMeetingTintRed: "红色",
         inMeetingTintOrange: "橙色",
+        inMeetingTintYellow: "黄色",
         inMeetingTintGreen: "绿色",
         inMeetingTintBlue: "蓝色",
         inMeetingTintPurple: "紫色",
-        inMeetingTintPink: "粉色",
+        inMeetingTintGray: "灰色",
         inMeetingTintNone: "无颜色",
         actionFailed: "无法完成。"
     )
@@ -762,11 +788,13 @@ extension QuickToggleFeatureStrings {
         inMeetingActiveIcon: "使用中的圖示",
         inMeetingActiveIconColor: "開啟時圖示顏色",
         inMeetingIconOpacity: "圖示透明度",
+        inMeetingTintRed: "紅色",
         inMeetingTintOrange: "橘色",
+        inMeetingTintYellow: "黃色",
         inMeetingTintGreen: "綠色",
         inMeetingTintBlue: "藍色",
         inMeetingTintPurple: "紫色",
-        inMeetingTintPink: "粉紅色",
+        inMeetingTintGray: "灰色",
         inMeetingTintNone: "無色彩",
         actionFailed: "無法完成。"
     )
@@ -815,11 +843,13 @@ extension QuickToggleFeatureStrings {
         inMeetingActiveIcon: "使用中的圖示",
         inMeetingActiveIconColor: "啟用時圖示顏色",
         inMeetingIconOpacity: "圖示透明度",
+        inMeetingTintRed: "紅色",
         inMeetingTintOrange: "橙色",
+        inMeetingTintYellow: "黃色",
         inMeetingTintGreen: "綠色",
         inMeetingTintBlue: "藍色",
         inMeetingTintPurple: "紫色",
-        inMeetingTintPink: "粉紅色",
+        inMeetingTintGray: "灰色",
         inMeetingTintNone: "沒有顏色",
         actionFailed: "無法完成。"
     )
@@ -867,11 +897,13 @@ extension QuickToggleFeatureStrings {
         inMeetingActiveIcon: "Активний значок",
         inMeetingActiveIconColor: "Колір активного значка",
         inMeetingIconOpacity: "Прозорість значка",
+        inMeetingTintRed: "Червоний",
         inMeetingTintOrange: "Помаранчевий",
+        inMeetingTintYellow: "Жовтий",
         inMeetingTintGreen: "Зелений",
         inMeetingTintBlue: "Синій",
         inMeetingTintPurple: "Фіолетовий",
-        inMeetingTintPink: "Рожевий",
+        inMeetingTintGray: "Сірий",
         inMeetingTintNone: "Без кольору",
         actionFailed: "Не вдалося завершити."
     )

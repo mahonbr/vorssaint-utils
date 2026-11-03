@@ -339,7 +339,7 @@ struct QuickTogglesList: View {
         case .inMeeting:
             PanelToggleRow(title: strings.inMeetingTitle,
                            caption: strings.inMeetingCaption,
-                           systemImage: "video.fill",
+                           systemImage: "person.crop.circle.badge.clock",
                            isOn: Binding(
                                get: { inMeeting.isEnabled },
                                set: { InMeetingService.shared.setEnabled($0) }

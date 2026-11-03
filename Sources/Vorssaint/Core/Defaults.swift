@@ -1156,7 +1156,7 @@ enum KeepAwakeActiveIcon: String, CaseIterable, Identifiable {
 /// to the Keep Awake one on purpose: the two features share nothing, so the
 /// keep-awake option can leave without touching this switch.
 enum InMeetingIconTint: String, CaseIterable, Identifiable {
-    case orange, green, blue, purple, pink, none
+    case red, orange, yellow, green, blue, purple, gray, none
 
     var id: String { rawValue }
 
@@ -1168,11 +1168,13 @@ enum InMeetingIconTint: String, CaseIterable, Identifiable {
 
     func title(_ strings: QuickToggleFeatureStrings) -> String {
         switch self {
+        case .red: return strings.inMeetingTintRed
         case .orange: return strings.inMeetingTintOrange
+        case .yellow: return strings.inMeetingTintYellow
         case .green: return strings.inMeetingTintGreen
         case .blue: return strings.inMeetingTintBlue
         case .purple: return strings.inMeetingTintPurple
-        case .pink: return strings.inMeetingTintPink
+        case .gray: return strings.inMeetingTintGray
         case .none: return strings.inMeetingTintNone
         }
     }
@@ -2544,8 +2546,9 @@ enum Defaults {
     }
 
     static func sanitizedInMeetingIconTint(_ rawValue: String?) -> InMeetingIconTint {
-        guard let rawValue,
-              let tint = InMeetingIconTint(rawValue: rawValue) else {
+        guard let rawValue else { return .orange }
+        if rawValue == "pink" { return .purple }
+        guard let tint = InMeetingIconTint(rawValue: rawValue) else {
             return .orange
         }
         return tint
@@ -2609,7 +2612,7 @@ enum Defaults {
     /// The symbols the "In a meeting" icon row offers between the app mark
     /// and the free-form cell: the three ways a meeting happens.
     static let inMeetingIconGallery = [
-        "video.fill", "person.2.fill", "phone.fill",
+        "person.crop.circle.badge.clock", "person.2.fill", "phone.fill",
     ]
 
     static func sanitizedMonitorInterval(_ seconds: Int) -> Int {

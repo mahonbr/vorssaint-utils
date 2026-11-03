@@ -199,11 +199,13 @@ struct InMeetingIconPicker: View {
 
     private func tintColor(_ tint: InMeetingIconTint) -> Color? {
         switch tint {
+        case .red: return .red
         case .orange: return .orange
+        case .yellow: return .yellow
         case .green: return .green
         case .blue: return .blue
         case .purple: return .purple
-        case .pink: return .pink
+        case .gray: return .gray
         case .none: return nil
         }
     }
@@ -229,7 +231,7 @@ private struct InMeetingSymbolNameField: View {
             Text(text.menuBarIconOther)
                 .font(.headline)
             HStack(spacing: 6) {
-                TextField(text.menuBarIconOther, text: $draft, prompt: Text(verbatim: "video.fill"))
+                TextField(text.menuBarIconOther, text: $draft, prompt: Text(verbatim: "person.crop.circle.badge.clock"))
                     .labelsHidden()
                     .textFieldStyle(.roundedBorder)
                     .autocorrectionDisabled()
