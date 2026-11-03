@@ -742,10 +742,6 @@ if [[ -d Resources/Images ]]; then
     mkdir -p "$STAGE/Contents/Resources/Images"
     cp Resources/Images/* "$STAGE/Contents/Resources/Images/"
 fi
-if [[ -d Resources/Sounds ]]; then
-    mkdir -p "$STAGE/Contents/Resources/Sounds"
-    cp Resources/Sounds/* "$STAGE/Contents/Resources/Sounds/"
-fi
 xattr -c -r "$STAGE" 2>/dev/null || true
 
 # Signing, in order of preference:

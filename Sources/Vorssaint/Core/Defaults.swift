@@ -387,6 +387,9 @@ enum DefaultsKey {
     // A standing switch, not a momentary action: the beep itself survives
     // relaunches, like the mic mute flag.
     static let hourlyBeepEnabled = "hourlyBeepEnabled"
+    // A stem inside /System/Library/Sounds (no extension), like the snippets'
+    // expansion sound.
+    static let hourlyBeepSound = "hourlyBeepSound"
     static let panelToggleInMeeting = "panelToggleInMeeting"
     // The other standing switch on the tab; its interval is stored in minutes.
     static let inMeetingEnabled = "inMeetingEnabled"
@@ -1219,6 +1222,7 @@ enum Defaults {
     static let allowedMonitorIntervals = [1, 2, 5]
     static let defaultKeyboardDebounceWindowMs = 5
     static let defaultSnippetSoundName = "Tink"
+    static let defaultHourlyBeepSoundName = "Ping"
     static let allowedKeyboardDebounceWindowRange = 0...500
     /// Stepper increment for the keyboard debounce window. Kept at 1 ms so
     /// magnetic-keyboard users can pick values below the old 5 ms UI step
@@ -1688,6 +1692,7 @@ enum Defaults {
         DefaultsKey.panelToggleScreenSaver: true,
         DefaultsKey.panelToggleHourlyBeep: true,
         DefaultsKey.hourlyBeepEnabled: false,
+        DefaultsKey.hourlyBeepSound: defaultHourlyBeepSoundName,
         DefaultsKey.panelToggleInMeeting: true,
         DefaultsKey.inMeetingEnabled: false,
         DefaultsKey.inMeetingMoveInterval: 5,

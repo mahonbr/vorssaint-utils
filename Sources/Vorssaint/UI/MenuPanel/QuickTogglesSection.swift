@@ -88,6 +88,7 @@ struct QuickTogglesList: View {
     @AppStorage(DefaultsKey.panelToggleScreenSaver) private var showScreenSaver = true
     @AppStorage(DefaultsKey.panelToggleHourlyBeep) private var showHourlyBeep = true
     @AppStorage(DefaultsKey.panelToggleInMeeting) private var showInMeeting = true
+    @AppStorage(DefaultsKey.hourlyBeepSound) private var beepSound = Defaults.defaultHourlyBeepSoundName
     @AppStorage(DefaultsKey.panelToggleOrder) private var toggleOrderRaw = ""
 
     let editing: Bool
@@ -325,7 +326,16 @@ struct QuickTogglesList: View {
                            ),
                            isEditing: editing,
                            showsDragHandle: true,
-                           visibility: visibilityBinding(item))
+                           visibility: visibilityBinding(item),
+                           pickerItems: beepSoundItems(),
+                           pickerSelection: Binding(
+                               get: { beepSound },
+                               set: {
+                                   beepSound = $0
+                                   // Picking is auditioning: the choice
+                                   // plays once the moment it is stored.
+                                   HourlyBeepService.shared.previewSound()
+                               }))
         case .inMeeting:
             PanelToggleRow(title: strings.inMeetingTitle,
                            caption: inMeetingCaption(strings),
@@ -344,6 +354,21 @@ struct QuickTogglesList: View {
                                Permissions.shared.openAccessibilitySettings()
                            } : nil)
         }
+    }
+
+    /// The picker's rows: every system alert sound under its localized
+    /// display name, plus a fallback tag for a stored name this Mac does not
+    /// ship, like the snippets' sound picker.
+    private func beepSoundItems() -> [(title: String, tag: String)] {
+        let language = l10n.language
+        var items = AlertSoundStrings
+            .sortedNames(TextSnippetSupport.alertSoundNames, language: language)
+            .map { (title: AlertSoundStrings.displayName(for: $0, language: language), tag: $0) }
+        if TextSnippetSupport.resolvedSoundName(stored: beepSound,
+                                                fallback: Defaults.defaultHourlyBeepSoundName) != beepSound {
+            items.append((title: FeatureStrings.snippets(language).soundUnavailable, tag: beepSound))
+        }
+        return items
     }
 
     // MARK: - Row state

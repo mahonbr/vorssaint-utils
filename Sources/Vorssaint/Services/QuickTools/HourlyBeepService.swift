@@ -16,18 +16,37 @@ final class HourlyBeepService: ObservableObject {
     /// One timer at a time, always aiming at the next top of the hour.
     private var timer: Timer?
 
-    /// Loaded once and replayed: decoding the clip on each hour would be the
-    /// only real cost of the feature. A bundle run without the resource (an
-    /// ad-hoc binary, a probe) falls back to the system alert sound.
-    private lazy var beep: NSSound? = {
-        guard let url = Bundle.main.url(forResource: "beep",
-                                        withExtension: "mp3",
-                                        subdirectory: "Sounds")
-        else { return nil }
-        return NSSound(contentsOf: url, byReference: false)
-    }()
+    /// The registered alert sound for the stored choice, rebuilt only when
+    /// the name it resolves to changes, so hourly replays cost nothing.
+    private var armedSound: AlertSound?
+    private var armedSoundName = ""
 
     private init() {}
+
+    /// The stored picker's choice resolved against the sounds this Mac
+    /// actually ships: a name saved on another Mac, or one a macOS update
+    /// dropped, still chimes rather than going silent.
+    private static func preferredSoundName() -> String? {
+        TextSnippetSupport.resolvedSoundName(
+            stored: UserDefaults.standard.string(forKey: DefaultsKey.hourlyBeepSound),
+            fallback: Defaults.defaultHourlyBeepSoundName)
+    }
+
+    /// Plays what the next chime would play, for the picker's preview.
+    func previewSound() {
+        chime()?.play()
+    }
+
+    /// The armed sound for the current stored choice, resolving it fresh so
+    /// the preview and the chime can never disagree about which name wins.
+    private func chime() -> AlertSound? {
+        guard let name = Self.preferredSoundName() else { return nil }
+        if name != armedSoundName || armedSound == nil {
+            armedSound = AlertSound(name: name)
+            armedSoundName = armedSound == nil ? "" : name
+        }
+        return armedSound
+    }
 
     /// Re-reads the stored switch and the feature gate; the binding runs it
     /// at launch and again whenever the feature is installed or removed, so
@@ -79,8 +98,8 @@ final class HourlyBeepService: ObservableObject {
     private func ring(due: Date) {
         timer = nil
         if Date().timeIntervalSince(due) <= Self.lateTolerance {
-            if let beep {
-                beep.play()
+            if let chime = chime() {
+                chime.play()
             } else {
                 NSSound.beep()
             }

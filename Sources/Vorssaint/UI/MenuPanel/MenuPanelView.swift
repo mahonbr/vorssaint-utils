@@ -2236,6 +2236,10 @@ struct PanelToggleRow: View {
     /// shown only outside edit mode.
     var accessoryTitle: String? = nil
     var accessoryAction: (() -> Void)? = nil
+    /// Optional inline picker under the title (e.g. the beep's sound choice),
+    /// shown only outside edit mode.
+    var pickerItems: [(title: String, tag: String)] = []
+    var pickerSelection: Binding<String>? = nil
 
     var body: some View {
         rowContent
@@ -2301,6 +2305,18 @@ struct PanelToggleRow: View {
                     }
                     .buttonStyle(.bordered)
                     .controlSize(.mini)
+                }
+                if !isEditing, let pickerSelection, !pickerItems.isEmpty {
+                    Picker("", selection: pickerSelection) {
+                        ForEach(pickerItems.indices, id: \.self) { index in
+                            Text(pickerItems[index].title).tag(pickerItems[index].tag)
+                        }
+                    }
+                    .labelsHidden()
+                    .pickerStyle(.menu)
+                    .controlSize(.mini)
+                    .fixedSize()
+                    .accessibilityLabel(title)
                 }
             }
             Spacer(minLength: 0)

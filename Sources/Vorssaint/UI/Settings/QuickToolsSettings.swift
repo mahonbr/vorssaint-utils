@@ -27,6 +27,7 @@ struct QuickToolsSettings: View {
     @AppStorage(DefaultsKey.scratchpadBackgroundOpacity) private var scratchpadBackgroundOpacity = 0.0
     @AppStorage(DefaultsKey.scratchpadTextSize) private var scratchpadTextSize = ScratchpadSupport.defaultTextSize
     @AppStorage(DefaultsKey.micMuteMenuBarIndicator) private var micMenuBarIndicator = false
+    @AppStorage(DefaultsKey.hourlyBeepSound) private var beepSound = Defaults.defaultHourlyBeepSoundName
     @AppStorage(DefaultsKey.cleaningModeKeepScreenVisible) private var cleaningModeKeepScreenVisible = false
 
     var body: some View {
@@ -100,6 +101,27 @@ struct QuickToolsSettings: View {
                     )) {
                         Label(FeatureStrings.quickToggles(l10n.language).hourlyBeepTitle,
                               systemImage: "bell.badge")
+                    }
+                    if hourlyBeep.isEnabled {
+                        Picker(FeatureStrings.snippets(l10n.language).soundPickerLabel,
+                               selection: $beepSound) {
+                            ForEach(AlertSoundStrings.sortedNames(TextSnippetSupport.alertSoundNames,
+                                                                  language: l10n.language), id: \.self) { name in
+                                Text(AlertSoundStrings.displayName(for: name,
+                                                                   language: l10n.language)).tag(name)
+                            }
+                            // A name stored on another Mac, or dropped by a
+                            // macOS update, needs a row of its own or the
+                            // picker shows an empty selection.
+                            if TextSnippetSupport.resolvedSoundName(
+                                stored: beepSound,
+                                fallback: Defaults.defaultHourlyBeepSoundName) != beepSound {
+                                Text(FeatureStrings.snippets(l10n.language).soundUnavailable).tag(beepSound)
+                            }
+                        }
+                        .onChange(of: beepSound) { _, _ in
+                            HourlyBeepService.shared.previewSound()
+                        }
                     }
                     DiskExclusionsList()
                     Text(FeatureStrings.quickToggles(l10n.language).panelCaption)

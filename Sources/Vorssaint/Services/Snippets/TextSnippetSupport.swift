@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Copyright (C) 2026 Vorssaint
 
+import AudioToolbox
 import Foundation
 
 /// One text snippet: typing the trigger inserts the replacement. Stored as
@@ -661,5 +662,31 @@ enum TextSnippetSupport {
 
     static func encode(_ snippets: [TextSnippet]) -> Data? {
         try? JSONEncoder().encode(snippets)
+    }
+}
+
+/// One alert sound file registered with the system sound server, so it
+/// plays the way the Mac's own alert sounds do: through the sound effects
+/// output device, at the alert volume, with the screen flash Accessibility
+/// can ask for in place of a sound. NSSound would play it on the default
+/// output device at the main volume, ignoring all three.
+final class AlertSound {
+    private let soundID: SystemSoundID
+
+    init?(name: String) {
+        var soundID: SystemSoundID = 0
+        let url = TextSnippetSupport.soundFileURL(for: name) as CFURL
+        guard AudioServicesCreateSystemSoundID(url, &soundID) == noErr else { return nil }
+        self.soundID = soundID
+    }
+
+    deinit {
+        AudioServicesDisposeSystemSoundID(soundID)
+    }
+
+    func play() {
+        // The completion holds this instance until playback ends, so a
+        // preview that resolved its own sound is not disposed mid-note.
+        AudioServicesPlayAlertSoundWithCompletion(soundID) { withExtendedLifetime(self) {} }
     }
 }
