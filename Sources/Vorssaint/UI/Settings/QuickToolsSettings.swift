@@ -147,19 +147,7 @@ struct QuickToolsSettings: View {
                         .font(.caption)
                         .foregroundStyle(.secondary)
                     if inMeeting.isEnabled {
-                        Picker(FeatureStrings.quickToggles(l10n.language).inMeetingInterval,
-                               selection: Binding(
-                                get: { inMeeting.intervalMinutes },
-                                set: { InMeetingService.shared.setInterval($0) }
-                               )) {
-                            ForEach(Defaults.allowedInMeetingMoveIntervals, id: \.self) { minutes in
-                                Text("\(minutes) min").tag(minutes)
-                            }
-                        }
                         InMeetingIconPicker()
-                        if !permissions.accessibility {
-                            PermissionRow(kind: .accessibility)
-                        }
                     }
                 } header: {
                     Text(FeatureStrings.quickToggles(l10n.language).inMeetingTitle)

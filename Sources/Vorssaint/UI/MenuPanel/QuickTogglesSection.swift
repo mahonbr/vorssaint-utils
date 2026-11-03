@@ -338,7 +338,7 @@ struct QuickTogglesList: View {
                                }))
         case .inMeeting:
             PanelToggleRow(title: strings.inMeetingTitle,
-                           caption: inMeetingCaption(strings),
+                           caption: strings.inMeetingCaption,
                            systemImage: "video.fill",
                            isOn: Binding(
                                get: { inMeeting.isEnabled },
@@ -346,13 +346,7 @@ struct QuickTogglesList: View {
                            ),
                            isEditing: editing,
                            showsDragHandle: true,
-                           visibility: visibilityBinding(item),
-                           needsAttention: inMeetingNeedsAccessibility,
-                           permissionButtonTitle: l10n.s.permissionRequest,
-                           permissionAction: inMeetingNeedsAccessibility ? {
-                               Permissions.shared.requestAccessibility()
-                               Permissions.shared.openAccessibilitySettings()
-                           } : nil)
+                           visibility: visibilityBinding(item))
         }
     }
 
@@ -407,18 +401,6 @@ struct QuickTogglesList: View {
         case .needsPermission, .none:
             return toggles.ejectableVolumeCount() > 0 ? strings.ejectCaption : l10n.s.diskNoExternal
         }
-    }
-
-    /// Posting the pointer nudge needs the Accessibility grant; while the
-    /// switch is on without it the row turns into the permission prompt.
-    private var inMeetingNeedsAccessibility: Bool {
-        inMeeting.isEnabled && !permissions.accessibility
-    }
-
-    private func inMeetingCaption(_ strings: QuickToggleFeatureStrings) -> String {
-        inMeetingNeedsAccessibility
-            ? "\(l10n.s.permissionRequired): \(l10n.s.permissionAccessibility)"
-            : strings.inMeetingCaption
     }
 
     private func needsPermission(_ item: QuickToggleAction) -> Bool {
