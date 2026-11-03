@@ -3052,10 +3052,11 @@ final class CommandBarService: ObservableObject {
         guard (isEnabled(.shortcuts) || pendingShortcut), !shortcutsLoading else { return }
         shortcutsLoading = true
         DispatchQueue.global(qos: .userInitiated).async { [weak self] in
-            let names = CommandBarShortcuts.installed()
+            let loaded = CommandBarShortcuts.installed()
             DispatchQueue.main.async {
                 guard let self else { return }
                 self.shortcutsLoading = false
+                guard let names = loaded else { return }
                 guard AppFeature.commandBar.isAvailable else { return }
                 let unchanged = names == self.shortcutNames
                 self.shortcutNames = names

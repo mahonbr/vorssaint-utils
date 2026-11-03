@@ -1067,10 +1067,20 @@ enum CommandBarFeatureTests {
         let commandBarServiceSource = (try? String(
             contentsOfFile: "Sources/Vorssaint/Services/CommandBar/CommandBarService.swift",
             encoding: .utf8)) ?? ""
+        let commandBarShortcutsSource = (try? String(
+            contentsOfFile: "Sources/Vorssaint/Services/CommandBar/CommandBarShortcuts.swift",
+            encoding: .utf8)) ?? ""
         suite.expect(commandBarServiceSource.contains("InputSourceSelection.asciiLayoutID"),
                "the bar borrows the ASCII layout through the shared TIS selection")
         suite.expect(commandBarServiceSource.contains("restoreSuspendedInputSource"),
                "closing the bar gives the suspended input source back")
+        suite.expect(commandBarServiceSource.contains("let loaded = CommandBarShortcuts.installed()")
+                && commandBarServiceSource.contains("guard let names = loaded else { return }"),
+               "a failed shortcuts refresh leaves the last indexed rows in place instead of clearing them")
+        suite.expect(commandBarShortcutsSource.contains("private static var running: [UUID: Process] = [:]")
+                && commandBarShortcutsSource.contains("let token = UUID()")
+                && commandBarShortcutsSource.contains("removeValue(forKey: token)"),
+               "shortcut runners are retained and released by a per-run token so PID reuse cannot drop a newer process")
         suite.expect(commandBarServiceSource.range(
                 of: #"AppFeature\.uninstaller\.isAvailable,\s*UninstallerSupport\.selection\(for:\s*app\.url\) != nil"#,
                 options: .regularExpression) != nil,

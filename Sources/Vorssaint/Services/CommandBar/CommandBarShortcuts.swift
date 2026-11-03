@@ -20,17 +20,17 @@ enum CommandBarShortcuts {
             ? "/System/Applications/Shortcuts.app" : nil
 
     /// Runners kept alive until they exit. A `Process` with no strong
-    /// reference left can be deallocated mid-run, so each one is held by pid
+    /// reference left can be deallocated mid-run, so each one is held by token
     /// for exactly as long as it runs; a shortcut that never ends keeps one
     /// entry in a dictionary and nothing else.
-    private static var running: [pid_t: Process] = [:]
+    private static var running: [UUID: Process] = [:]
     private static let runningLock = NSLock()
 
     /// Every shortcut the system knows, one name per line from its own tool.
     /// Sorted here so the catalog and the browse category see one stable order.
-    static func installed() -> [String] {
+    static func installed() -> [String]? {
         let result = Shell.run("/usr/bin/shortcuts", ["list"], timeout: 15)
-        guard result.status == 0 else { return [] }
+        guard result.status == 0 else { return nil }
         var seen = Set<String>()
         return result.output.split(separator: "\n")
             .map { $0.trimmingCharacters(in: .whitespaces) }
@@ -45,6 +45,7 @@ enum CommandBarShortcuts {
     /// is already gone.
     static func run(named name: String) {
         let process = Process()
+        let token = UUID()
         process.executableURL = URL(fileURLWithPath: "/usr/bin/shortcuts")
         process.arguments = ["run", name]
         // A shortcut that reads stdin would hang forever on an inherited
@@ -54,7 +55,7 @@ enum CommandBarShortcuts {
         process.standardOutput = FileHandle.nullDevice
         process.standardError = FileHandle.nullDevice
         process.terminationHandler = { finished in
-            runningLock.withLock { _ = running.removeValue(forKey: finished.processIdentifier) }
+            runningLock.withLock { _ = running.removeValue(forKey: token) }
             if finished.terminationReason == .exit, finished.terminationStatus != 0 {
                 DispatchQueue.main.async { NSSound.beep() }
             }
@@ -62,7 +63,7 @@ enum CommandBarShortcuts {
         do {
             try process.run()
             runningLock.withLock {
-                if process.isRunning { running[process.processIdentifier] = process }
+                if process.isRunning { running[token] = process }
             }
         } catch {
             NSSound.beep()
