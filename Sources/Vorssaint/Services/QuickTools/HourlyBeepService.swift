@@ -15,6 +15,7 @@ final class HourlyBeepService: ObservableObject {
 
     /// One timer at a time, always aiming at the next top of the hour.
     private var timer: Timer?
+    private var clockObservers: [NSObjectProtocol] = []
 
     /// The registered alert sound for the stored choice, rebuilt only when
     /// the name it resolves to changes, so hourly replays cost nothing.
@@ -65,10 +66,21 @@ final class HourlyBeepService: ObservableObject {
 
     private func syncTimer() {
         if isEnabled, AppFeature.quickToggles.isAvailable {
+            if clockObservers.isEmpty {
+                clockObservers = [NSNotification.Name.NSSystemTimeZoneDidChange,
+                                  NSNotification.Name.NSSystemClockDidChange].map { name in
+                    NotificationCenter.default.addObserver(forName: name, object: nil,
+                                                           queue: .main) { [weak self] _ in
+                        self?.syncTimer()
+                    }
+                }
+            }
             scheduleNext()
         } else {
             timer?.invalidate()
             timer = nil
+            for observer in clockObservers { NotificationCenter.default.removeObserver(observer) }
+            clockObservers = []
         }
     }
 
