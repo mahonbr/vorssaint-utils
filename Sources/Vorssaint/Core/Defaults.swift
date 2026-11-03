@@ -387,6 +387,15 @@ enum DefaultsKey {
     // A standing switch, not a momentary action: the beep itself survives
     // relaunches, like the mic mute flag.
     static let hourlyBeepEnabled = "hourlyBeepEnabled"
+    static let panelToggleInMeeting = "panelToggleInMeeting"
+    // The other standing switch on the tab; its interval is stored in minutes.
+    static let inMeetingEnabled = "inMeetingEnabled"
+    static let inMeetingMoveInterval = "inMeetingMoveIntervalMinutes"
+    // The menu bar icon while the switch is on: an optional symbol name
+    // (empty keeps the mark), a tint and a transparency.
+    static let inMeetingMenuBarSymbol = "inMeetingMenuBarSymbol"
+    static let inMeetingIconTint = "inMeetingIconTint"
+    static let inMeetingIconOpacity = "inMeetingIconOpacity"
 
     // System monitor — live metrics shown next to the menu bar icon (opt-in).
     static let menuBarCPU = "menuBarCPU"
@@ -1140,6 +1149,32 @@ enum KeepAwakeActiveIcon: String, CaseIterable, Identifiable {
     }
 }
 
+/// The tint the "In a meeting" menu bar icon takes. Its own type, parallel
+/// to the Keep Awake one on purpose: the two features share nothing, so the
+/// keep-awake option can leave without touching this switch.
+enum InMeetingIconTint: String, CaseIterable, Identifiable {
+    case orange, green, blue, purple, pink, none
+
+    var id: String { rawValue }
+
+    static var current: InMeetingIconTint {
+        Defaults.sanitizedInMeetingIconTint(
+            UserDefaults.standard.string(forKey: DefaultsKey.inMeetingIconTint)
+        )
+    }
+
+    func title(_ strings: QuickToggleFeatureStrings) -> String {
+        switch self {
+        case .orange: return strings.inMeetingTintOrange
+        case .green: return strings.inMeetingTintGreen
+        case .blue: return strings.inMeetingTintBlue
+        case .purple: return strings.inMeetingTintPurple
+        case .pink: return strings.inMeetingTintPink
+        case .none: return strings.inMeetingTintNone
+        }
+    }
+}
+
 /// Thumbnail size for Dock Preview and, separately, the app switcher. Captures
 /// scale by the same factor, so larger previews stay sharp.
 enum PreviewSizing {
@@ -1179,6 +1214,7 @@ enum Defaults {
 
     static let allowedDurations = [0, 15, 30, 60, 120, 240, 480]
     static let allowedKeepAwakeMouseJiggleIntervals = [1, 2, 5, 10, 15]
+    static let allowedInMeetingMoveIntervals = [1, 2, 3, 4, 5, 10, 15]
     static let allowedBatteryLimits = [0, 5, 10, 15, 20]
     static let allowedMonitorIntervals = [1, 2, 5]
     static let defaultKeyboardDebounceWindowMs = 5
@@ -1652,6 +1688,12 @@ enum Defaults {
         DefaultsKey.panelToggleScreenSaver: true,
         DefaultsKey.panelToggleHourlyBeep: true,
         DefaultsKey.hourlyBeepEnabled: false,
+        DefaultsKey.panelToggleInMeeting: true,
+        DefaultsKey.inMeetingEnabled: false,
+        DefaultsKey.inMeetingMoveInterval: 5,
+        DefaultsKey.inMeetingMenuBarSymbol: "",
+        DefaultsKey.inMeetingIconTint: InMeetingIconTint.orange.rawValue,
+        DefaultsKey.inMeetingIconOpacity: 1.0,
         // Menu bar metrics start off (the icon stays clean) and are opt-in.
         // The panel shows every monitoring block by default; users hide what
         // they don't want.
@@ -2492,6 +2534,26 @@ enum Defaults {
         allowedKeepAwakeMouseJiggleIntervals.contains(minutes) ? minutes : 5
     }
 
+    static func sanitizedInMeetingMoveInterval(_ minutes: Int) -> Int {
+        allowedInMeetingMoveIntervals.contains(minutes) ? minutes : 5
+    }
+
+    static func sanitizedInMeetingIconTint(_ rawValue: String?) -> InMeetingIconTint {
+        guard let rawValue,
+              let tint = InMeetingIconTint(rawValue: rawValue) else {
+            return .orange
+        }
+        return tint
+    }
+
+    /// Fully transparent would leave nothing on the menu bar, so the stored
+    /// range bottoms out at a faint but visible 20%; a missing or zeroed
+    /// value means full strength.
+    static func sanitizedInMeetingIconOpacity(_ value: Double) -> Double {
+        guard value > 0 else { return 1 }
+        return min(max(value, 0.2), 1)
+    }
+
     static func sanitizedKeepAwakeIconTint(_ rawValue: String?) -> KeepAwakeIconTint {
         guard let rawValue,
               let tint = KeepAwakeIconTint(rawValue: rawValue) else {
@@ -2537,6 +2599,12 @@ enum Defaults {
         "fanblades.fill", "gearshape.fill", "terminal.fill", "waveform",
         "wand.and.stars", "key.fill", "crown.fill", "gamecontroller.fill", "headphones",
         "music.note", "paperplane.fill", "pawprint.fill", "cat.fill", "hare.fill", "tortoise.fill",
+    ]
+
+    /// The symbols the "In a meeting" icon row offers between the app mark
+    /// and the free-form cell: the three ways a meeting happens.
+    static let inMeetingIconGallery = [
+        "video.fill", "person.2.fill", "phone.fill",
     ]
 
     static func sanitizedMonitorInterval(_ seconds: Int) -> Int {

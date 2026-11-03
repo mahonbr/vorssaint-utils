@@ -72,6 +72,8 @@ struct QuickTogglesList: View {
     @ObservedObject private var micMute = MicMuteService.shared
     @ObservedObject private var brightness = BrightnessService.shared
     @ObservedObject private var hourlyBeep = HourlyBeepService.shared
+    @ObservedObject private var inMeeting = InMeetingService.shared
+    @ObservedObject private var permissions = Permissions.shared
     @Environment(\.colorScheme) private var colorScheme
     @AppStorage(DefaultsKey.panelToggleDarkMode) private var showDarkMode = true
     @AppStorage(DefaultsKey.panelToggleKeyboardLight) private var showKeyboardLight = true
@@ -85,6 +87,7 @@ struct QuickTogglesList: View {
     @AppStorage(DefaultsKey.panelToggleDisplayOff) private var showDisplayOff = true
     @AppStorage(DefaultsKey.panelToggleScreenSaver) private var showScreenSaver = true
     @AppStorage(DefaultsKey.panelToggleHourlyBeep) private var showHourlyBeep = true
+    @AppStorage(DefaultsKey.panelToggleInMeeting) private var showInMeeting = true
     @AppStorage(DefaultsKey.panelToggleOrder) private var toggleOrderRaw = ""
 
     let editing: Bool
@@ -119,7 +122,7 @@ struct QuickTogglesList: View {
                     DefaultsKey.panelToggleEjectDisks, DefaultsKey.panelToggleHiddenFiles,
                     DefaultsKey.panelToggleDesktopIcons, DefaultsKey.panelToggleLockScreen,
                     DefaultsKey.panelToggleDisplayOff, DefaultsKey.panelToggleScreenSaver,
-                    DefaultsKey.panelToggleHourlyBeep] {
+                    DefaultsKey.panelToggleHourlyBeep, DefaultsKey.panelToggleInMeeting] {
             defaults.set(true, forKey: key)
         }
     }
@@ -165,6 +168,7 @@ struct QuickTogglesList: View {
         case .displayOff: return $showDisplayOff
         case .screenSaver: return $showScreenSaver
         case .hourlyBeep: return $showHourlyBeep
+        case .inMeeting: return $showInMeeting
         }
     }
 
@@ -322,6 +326,23 @@ struct QuickTogglesList: View {
                            isEditing: editing,
                            showsDragHandle: true,
                            visibility: visibilityBinding(item))
+        case .inMeeting:
+            PanelToggleRow(title: strings.inMeetingTitle,
+                           caption: inMeetingCaption(strings),
+                           systemImage: "video.fill",
+                           isOn: Binding(
+                               get: { inMeeting.isEnabled },
+                               set: { InMeetingService.shared.setEnabled($0) }
+                           ),
+                           isEditing: editing,
+                           showsDragHandle: true,
+                           visibility: visibilityBinding(item),
+                           needsAttention: inMeetingNeedsAccessibility,
+                           permissionButtonTitle: l10n.s.permissionRequest,
+                           permissionAction: inMeetingNeedsAccessibility ? {
+                               Permissions.shared.requestAccessibility()
+                               Permissions.shared.openAccessibilitySettings()
+                           } : nil)
         }
     }
 
@@ -361,6 +382,18 @@ struct QuickTogglesList: View {
         case .needsPermission, .none:
             return toggles.ejectableVolumeCount() > 0 ? strings.ejectCaption : l10n.s.diskNoExternal
         }
+    }
+
+    /// Posting the pointer nudge needs the Accessibility grant; while the
+    /// switch is on without it the row turns into the permission prompt.
+    private var inMeetingNeedsAccessibility: Bool {
+        inMeeting.isEnabled && !permissions.accessibility
+    }
+
+    private func inMeetingCaption(_ strings: QuickToggleFeatureStrings) -> String {
+        inMeetingNeedsAccessibility
+            ? "\(l10n.s.permissionRequired): \(l10n.s.permissionAccessibility)"
+            : strings.inMeetingCaption
     }
 
     private func needsPermission(_ item: QuickToggleAction) -> Bool {

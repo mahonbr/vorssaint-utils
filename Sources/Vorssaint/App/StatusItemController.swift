@@ -36,7 +36,7 @@ final class StatusItemController {
     /// it. Recovery leaves such an item alone.
     private(set) var mainItemHiddenByChoice = false
     private var heldMicBadgeActive: Bool?
-    private var heldKeepAwakeSignal: Bool?
+    private var heldActivitySignal: Bool?
     /// A settings reply already waiting for the next turn of the run loop.
     private var settingsSyncScheduled = false
     /// How many readings in a row each metric has failed to render, so an
@@ -167,6 +167,14 @@ final class StatusItemController {
 
     private func bind() {
         KeepAwakeManager.shared.$isActive
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                self?.updateIconAppearance()
+                self?.refresh()
+            }
+            .store(in: &cancellables)
+
+        InMeetingService.shared.$isEnabled
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
                 self?.updateIconAppearance()
@@ -314,15 +322,17 @@ final class StatusItemController {
         heldMicBadgeActive ?? currentMicBadgeActive
     }
 
-    private var currentKeepAwakeSignal: Bool {
+    private var currentActivitySignal: Bool {
         MenuBarSpacingSupport.keepAwakeSignals(active: KeepAwakeManager.shared.isActive,
                                                tint: .current, style: .current)
+            || InMeetingService.shared.signalsActiveIcon
     }
 
-    /// Whether a running Keep Awake session brings back the glyph the
-    /// metrics option hides. Held with the mic badge while a panel is open.
-    private var keepAwakeSignal: Bool {
-        heldKeepAwakeSignal ?? currentKeepAwakeSignal
+    /// Whether a running Keep Awake session or an enabled In a meeting
+    /// switch brings back the glyph the metrics option hides. Held with the
+    /// mic badge while a panel is open.
+    private var activitySignal: Bool {
+        heldActivitySignal ?? currentActivitySignal
     }
 
     /// Keeps the variable-width mic badge, and whether Keep Awake brings the
@@ -333,12 +343,12 @@ final class StatusItemController {
         if held {
             guard heldMicBadgeActive == nil else { return }
             heldMicBadgeActive = currentMicBadgeActive
-            heldKeepAwakeSignal = currentKeepAwakeSignal
+            heldActivitySignal = currentActivitySignal
             return
         }
         guard heldMicBadgeActive != nil else { return }
         heldMicBadgeActive = nil
-        heldKeepAwakeSignal = nil
+        heldActivitySignal = nil
         // The title's leading space follows the glyph, so the whole refresh
         // runs, not just the icon; refresh() ends with updateIconAppearance().
         refresh()
@@ -371,7 +381,7 @@ final class StatusItemController {
             separateMetrics: separateMetrics,
             metricsEnabled: MenuBarMetric.anyEnabled(in: defaults),
             renderedTitleLength: button.attributedTitle.length,
-            mustShowForSignal: signal || keepAwakeSignal)
+            mustShowForSignal: signal || activitySignal)
         // In the separate-items mode the metrics are their own clickable
         // items, so hiding means the whole main item steps aside instead of
         // just its image (which is all that item has). With Dynamic Island
@@ -382,9 +392,10 @@ final class StatusItemController {
                 separateMetrics: separateMetrics,
                 metricItemsShown: renderedMetricItemCount,
                 renderedTitleLength: button.attributedTitle.length,
-                mustShowForSignal: signal || keepAwakeSignal)
+                mustShowForSignal: signal || activitySignal)
         mainItemHiddenByChoice = mainItemHidden
         let keepAwakeActive = KeepAwakeManager.shared.isActive
+        let inMeetingActive = InMeetingService.shared.isEnabled
 
         // refresh() runs on every monitor tick and lands here; re-rendering
         // the same image every 2 seconds would be wasted composition, so the
@@ -392,7 +403,9 @@ final class StatusItemController {
         let stateKey = [String(hidden), String(mainItemHidden), String(updateAvailable),
                         String(keepAwakeActive), KeepAwakeIconTint.current.rawValue,
                         KeepAwakeActiveIcon.current.rawValue, BlackHoleGlyph.chosenSymbolName,
-                        String(micBadgeActive)].joined(separator: "|")
+                        String(micBadgeActive), String(inMeetingActive),
+                        InMeetingIconTint.current.rawValue, InMeetingService.storedSymbol,
+                        String(InMeetingService.storedOpacity)].joined(separator: "|")
         guard stateKey != lastIconStateKey else { return }
         lastIconStateKey = stateKey
 
@@ -407,6 +420,8 @@ final class StatusItemController {
         let stateImage: NSImage?
         if updateAvailable {
             stateImage = BlackHoleGlyph.attentionImage()
+        } else if inMeetingActive {
+            stateImage = BlackHoleGlyph.inMeetingImage()
         } else {
             stateImage = BlackHoleGlyph.image(active: keepAwakeActive)
         }
@@ -534,7 +549,7 @@ final class StatusItemController {
                     separateMetrics: separateMetrics,
                     metricsEnabled: !metrics.isEmpty,
                     renderedTitleLength: 1,
-                    mustShowForSignal: signal || keepAwakeSignal)
+                    mustShowForSignal: signal || activitySignal)
             let full = NSMutableAttributedString(string: glyphHidden ? "" : " ")
             full.append(title)
             let stacked = full.string.contains("\n")
@@ -1062,6 +1077,43 @@ enum BlackHoleGlyph {
         return composed
     }
 
+    /// The "In a meeting" menu bar icon from the stored picks, or the preview
+    /// form the settings cells draw for a symbol that is not the one in use.
+    static func inMeetingImage() -> NSImage? {
+        inMeetingImage(symbol: InMeetingService.storedSymbol,
+                       tint: .current,
+                       opacity: InMeetingService.storedOpacity)
+    }
+
+    /// The chosen symbol on the same canvas as the mark (or the mark itself
+    /// for an empty name), tinted and faded by the given options. A symbol
+    /// this Mac does not have falls back to the mark.
+    static func inMeetingImage(symbol: String, tint: InMeetingIconTint, opacity: Double) -> NSImage? {
+        let source = symbol.isEmpty ? mark() : (customMark(named: symbol) ?? mark())
+        guard let source else { return fallback(active: tint != .none) }
+        var image = source
+        if let color = color(for: tint) {
+            image = tintedImage(source, color: color) ?? source
+        } else {
+            image.isTemplate = true
+        }
+        if opacity < 1, let faded = fadedImage(image, opacity: opacity) {
+            image = faded
+        }
+        return image
+    }
+
+    /// Draws the source at reduced opacity, keeping the template flag so an
+    /// untinted glyph still adapts to the menu bar.
+    private static func fadedImage(_ source: NSImage, opacity: Double) -> NSImage? {
+        let faded = NSImage(size: source.size, flipped: false) { rect in
+            source.draw(in: rect, from: .zero, operation: .sourceOver, fraction: opacity)
+            return true
+        }
+        faded.isTemplate = source.isTemplate
+        return faded
+    }
+
     private static func tintedImage(_ source: NSImage, color: NSColor) -> NSImage? {
         let tinted = NSImage(size: source.size, flipped: false) { rect in
             source.draw(in: rect, from: .zero, operation: .sourceOver, fraction: 1)
@@ -1074,6 +1126,17 @@ enum BlackHoleGlyph {
     }
 
     private static func color(for tint: KeepAwakeIconTint) -> NSColor? {
+        switch tint {
+        case .orange: return .systemOrange
+        case .green: return .systemGreen
+        case .blue: return .systemBlue
+        case .purple: return .systemPurple
+        case .pink: return .systemPink
+        case .none: return nil
+        }
+    }
+
+    private static func color(for tint: InMeetingIconTint) -> NSColor? {
         switch tint {
         case .orange: return .systemOrange
         case .green: return .systemGreen

@@ -312,6 +312,7 @@ final class FeatureRuntime: ObservableObject {
         .quickToggles: {
             QuickTogglesService.shared.syncWithPreferences()
             HourlyBeepService.shared.syncWithPreferences()
+            InMeetingService.shared.syncWithPreferences()
         },
         .quitApps: { QuickTogglesService.shared.syncWithPreferences() },
         .musicBlock: { MusicLaunchBlocker.shared.syncWithPreferences() },

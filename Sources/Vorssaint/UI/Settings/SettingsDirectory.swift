@@ -402,6 +402,8 @@ enum SettingsDirectory {
                                                             .darkModeToDark,
                                                          FeatureStrings.quickToggles(language)
                                                             .emptyTrashTitle,
+                                                         FeatureStrings.quickToggles(language)
+                                                            .inMeetingTitle,
                                                          FeatureStrings.brightness(language)
                                                             .keyboardLight]),
                                         (.quitApps, [s.quitAppsName,

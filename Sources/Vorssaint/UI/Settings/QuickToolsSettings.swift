@@ -15,6 +15,7 @@ struct QuickToolsSettings: View {
     @ObservedObject private var scratchpad = ScratchpadService.shared
     @ObservedObject private var brightness = BrightnessService.shared
     @ObservedObject private var hourlyBeep = HourlyBeepService.shared
+    @ObservedObject private var inMeeting = InMeetingService.shared
     @AppStorage(DefaultsKey.quickLauncherShortcutEnabled) private var launcherShortcutEnabled = true
     @AppStorage(DefaultsKey.micMuteShortcutEnabled) private var micShortcutEnabled = false
     @AppStorage(DefaultsKey.quitAppsShortcutEnabled) private var quitAllShortcutEnabled = false
@@ -109,6 +110,39 @@ struct QuickToolsSettings: View {
                 }
                 .settingsFormSectionAnchor(.quickToggles)
                 .onAppear { brightness.refreshKeyboardLight() }
+            }
+
+            if AppFeature.quickToggles.isAvailable {
+                Section {
+                    Toggle(isOn: Binding(
+                        get: { inMeeting.isEnabled },
+                        set: { InMeetingService.shared.setEnabled($0) }
+                    )) {
+                        Label(FeatureStrings.quickToggles(l10n.language).inMeetingTitle,
+                              systemImage: "video.fill")
+                    }
+                    Text(FeatureStrings.quickToggles(l10n.language).inMeetingCaption)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                    if inMeeting.isEnabled {
+                        Picker(FeatureStrings.quickToggles(l10n.language).inMeetingInterval,
+                               selection: Binding(
+                                get: { inMeeting.intervalMinutes },
+                                set: { InMeetingService.shared.setInterval($0) }
+                               )) {
+                            ForEach(Defaults.allowedInMeetingMoveIntervals, id: \.self) { minutes in
+                                Text("\(minutes) min").tag(minutes)
+                            }
+                        }
+                        InMeetingIconPicker()
+                        if !permissions.accessibility {
+                            PermissionRow(kind: .accessibility)
+                        }
+                    }
+                } header: {
+                    Text(FeatureStrings.quickToggles(l10n.language).inMeetingTitle)
+                }
+                .settingsFormSectionAnchor(.inMeeting)
             }
 
             if AppFeature.quitApps.isAvailable {

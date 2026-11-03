@@ -2645,17 +2645,19 @@ enum SwitcherModelFeatureTests {
         // Both hide decisions and the title's leading space ask it, and an open
         // panel holds it: the returning glyph widens the item, and a separate
         // main item coming back shifts the metric item the panel hangs from.
-        let keepAwakeHoldCode = stripCommentLines((statusControllerSource
+        let signalHoldCode = stripCommentLines((statusControllerSource
             .components(separatedBy: "func setMicBadgeHeld(_ held: Bool) {").last ?? "")
             .components(separatedBy: "\n    }").first ?? "")
         suite.expect(statusControllerSource
-                        .components(separatedBy: "mustShowForSignal: signal || keepAwakeSignal").count == 4,
-               "every hide path brings the glyph back for a running Keep Awake")
-        suite.expect(keepAwakeHoldCode.contains("heldKeepAwakeSignal = currentKeepAwakeSignal")
-                     && keepAwakeHoldCode.contains("heldKeepAwakeSignal = nil")
-                     && keepAwakeHoldCode.contains("refresh()")
-                     && statusControllerSource.contains("heldKeepAwakeSignal ?? currentKeepAwakeSignal"),
-               "starting or stopping Keep Awake from an open panel does not bring the glyph back under it")
+                        .components(separatedBy: "mustShowForSignal: signal || activitySignal").count == 4,
+               "every hide path brings the glyph back for a running Keep Awake or an enabled In a meeting")
+        suite.expect(statusControllerSource.contains("InMeetingService.shared.signalsActiveIcon"),
+               "an enabled In a meeting brings the glyph back the same way")
+        suite.expect(signalHoldCode.contains("heldActivitySignal = currentActivitySignal")
+                     && signalHoldCode.contains("heldActivitySignal = nil")
+                     && signalHoldCode.contains("refresh()")
+                     && statusControllerSource.contains("heldActivitySignal ?? currentActivitySignal"),
+               "starting or stopping a status icon feature from an open panel does not bring the glyph back under it")
         // popoverDidClose keeps the hold while the panel switches anchors, so
         // a switch that ends with the panel closed has to release it itself.
         // Otherwise the glyph ignores Keep Awake until the next panel closes.

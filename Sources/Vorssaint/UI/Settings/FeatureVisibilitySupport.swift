@@ -44,6 +44,7 @@ enum SettingsSectionAnchor: String, CaseIterable, Hashable {
     case pastePlain
     case quickLauncher
     case quickToggles
+    case inMeeting
     case quitApps
     case screenshot
     case screenRecorder
@@ -72,8 +73,8 @@ enum SettingsSectionAnchor: String, CaseIterable, Hashable {
         case .dock, .dockClick, .spacesOrder: return .dock
         case .finderCutPaste, .finderRename: return .cutPaste
         case .clipboardHistory, .pastePlain: return .clipboard
-        case .quickLauncher, .quickToggles, .quitApps, .micMute, .cameraPreview, .wallpaper, .scratchpad,
-             .cleaningMode:
+        case .quickLauncher, .quickToggles, .inMeeting, .quitApps, .micMute, .cameraPreview, .wallpaper,
+             .scratchpad, .cleaningMode:
             return .quickTools
         case .screenshot, .screenRecorder, .colorPicker, .screenOCR:
             return .screenshot

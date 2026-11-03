@@ -44,6 +44,18 @@ struct QuickToggleFeatureStrings {
     let screenSaverCaption: String
     let hourlyBeepTitle: String
     let hourlyBeepCaption: String
+    let inMeetingTitle: String
+    let inMeetingCaption: String
+    let inMeetingInterval: String
+    let inMeetingActiveIcon: String
+    let inMeetingActiveIconColor: String
+    let inMeetingIconOpacity: String
+    let inMeetingTintOrange: String
+    let inMeetingTintGreen: String
+    let inMeetingTintBlue: String
+    let inMeetingTintPurple: String
+    let inMeetingTintPink: String
+    let inMeetingTintNone: String
     let actionFailed: String
 }
 
@@ -108,6 +120,18 @@ extension QuickToggleFeatureStrings {
         screenSaverCaption: "Starts right away, on every display.",
         hourlyBeepTitle: "Beep on the hour",
         hourlyBeepCaption: "Plays a short beep at the top of every hour.",
+        inMeetingTitle: "In a meeting",
+        inMeetingCaption: "Identifies the user as currently in a meeting.",
+        inMeetingInterval: "Interval",
+        inMeetingActiveIcon: "Active icon",
+        inMeetingActiveIconColor: "Active icon color",
+        inMeetingIconOpacity: "Icon transparency",
+        inMeetingTintOrange: "Orange",
+        inMeetingTintGreen: "Green",
+        inMeetingTintBlue: "Blue",
+        inMeetingTintPurple: "Purple",
+        inMeetingTintPink: "Pink",
+        inMeetingTintNone: "No color",
         actionFailed: "Could not complete."
     )
 
@@ -149,6 +173,18 @@ extension QuickToggleFeatureStrings {
         screenSaverCaption: "Começa na hora, em todas as telas.",
         hourlyBeepTitle: "Bipe a cada hora",
         hourlyBeepCaption: "Toca um bipe curto no início de cada hora.",
+        inMeetingTitle: "Em reunião",
+        inMeetingCaption: "Identifica você como estando em reunião no momento.",
+        inMeetingInterval: "Intervalo",
+        inMeetingActiveIcon: "Ícone ativo",
+        inMeetingActiveIconColor: "Cor do ícone ativo",
+        inMeetingIconOpacity: "Transparência do ícone",
+        inMeetingTintOrange: "Laranja",
+        inMeetingTintGreen: "Verde",
+        inMeetingTintBlue: "Azul",
+        inMeetingTintPurple: "Roxo",
+        inMeetingTintPink: "Rosa",
+        inMeetingTintNone: "Sem cor",
         actionFailed: "Não foi possível concluir."
     )
 
@@ -190,6 +226,18 @@ extension QuickToggleFeatureStrings {
         screenSaverCaption: "Hemen, tüm ekranlarda başlar.",
         hourlyBeepTitle: "Saat başında bip",
         hourlyBeepCaption: "Her saat başında kısa bir bip sesi çalar.",
+        inMeetingTitle: "Toplantıda",
+        inMeetingCaption: "Sizi şu anda toplantıda olarak tanımlar.",
+        inMeetingInterval: "Aralık",
+        inMeetingActiveIcon: "Etkin simge",
+        inMeetingActiveIconColor: "Etkin simge rengi",
+        inMeetingIconOpacity: "Simge saydamlığı",
+        inMeetingTintOrange: "Turuncu",
+        inMeetingTintGreen: "Yeşil",
+        inMeetingTintBlue: "Mavi",
+        inMeetingTintPurple: "Mor",
+        inMeetingTintPink: "Pembe",
+        inMeetingTintNone: "Renk yok",
         actionFailed: "Tamamlanamadı."
     )
 
@@ -231,6 +279,18 @@ extension QuickToggleFeatureStrings {
         screenSaverCaption: "Запускается сразу на всех экранах.",
         hourlyBeepTitle: "Сигнал каждый час",
         hourlyBeepCaption: "Воспроизводит короткий сигнал в начале каждого часа.",
+        inMeetingTitle: "На совещании",
+        inMeetingCaption: "Показывает, что вы сейчас на совещании.",
+        inMeetingInterval: "Интервал",
+        inMeetingActiveIcon: "Активный значок",
+        inMeetingActiveIconColor: "Цвет активного значка",
+        inMeetingIconOpacity: "Прозрачность значка",
+        inMeetingTintOrange: "Оранжевый",
+        inMeetingTintGreen: "Зелёный",
+        inMeetingTintBlue: "Синий",
+        inMeetingTintPurple: "Фиолетовый",
+        inMeetingTintPink: "Розовый",
+        inMeetingTintNone: "Без цвета",
         actionFailed: "Не удалось выполнить."
     )
 
@@ -272,6 +332,18 @@ extension QuickToggleFeatureStrings {
         screenSaverCaption: "Empieza al momento, en todas las pantallas.",
         hourlyBeepTitle: "Pitido cada hora en punto",
         hourlyBeepCaption: "Reproduce un pitido corto al comienzo de cada hora.",
+        inMeetingTitle: "En una reunión",
+        inMeetingCaption: "Te identifica como que estás en una reunión.",
+        inMeetingInterval: "Intervalo",
+        inMeetingActiveIcon: "Icono activo",
+        inMeetingActiveIconColor: "Color del icono activo",
+        inMeetingIconOpacity: "Transparencia del icono",
+        inMeetingTintOrange: "Naranja",
+        inMeetingTintGreen: "Verde",
+        inMeetingTintBlue: "Azul",
+        inMeetingTintPurple: "Morado",
+        inMeetingTintPink: "Rosa",
+        inMeetingTintNone: "Sin color",
         actionFailed: "No se pudo completar."
     )
 
@@ -313,6 +385,18 @@ extension QuickToggleFeatureStrings {
         screenSaverCaption: "Spustí sa hneď, na všetkých displejoch.",
         hourlyBeepTitle: "Pípnutie každú celú hodinu",
         hourlyBeepCaption: "Prehrá krátke pípnutie na začiatku každej hodiny.",
+        inMeetingTitle: "Na porade",
+        inMeetingCaption: "Označuje vás ako momentálne na porade.",
+        inMeetingInterval: "Interval",
+        inMeetingActiveIcon: "Ikona pri aktivite",
+        inMeetingActiveIconColor: "Farba aktívnej ikony",
+        inMeetingIconOpacity: "Priehľadnosť ikony",
+        inMeetingTintOrange: "Oranžová",
+        inMeetingTintGreen: "Zelená",
+        inMeetingTintBlue: "Modrá",
+        inMeetingTintPurple: "Fialová",
+        inMeetingTintPink: "Ružová",
+        inMeetingTintNone: "Bez farby",
         actionFailed: "Nepodarilo sa dokončiť."
     )
 
@@ -354,6 +438,18 @@ extension QuickToggleFeatureStrings {
         screenSaverCaption: "Startet sofort, auf allen Bildschirmen.",
         hourlyBeepTitle: "Stündlicher Signalton",
         hourlyBeepCaption: "Spielt zu jeder vollen Stunde einen kurzen Signalton.",
+        inMeetingTitle: "In einer Besprechung",
+        inMeetingCaption: "Kennzeichnet dich als gerade in einer Besprechung.",
+        inMeetingInterval: "Intervall",
+        inMeetingActiveIcon: "Aktives Symbol",
+        inMeetingActiveIconColor: "Farbe des aktiven Symbols",
+        inMeetingIconOpacity: "Symboltransparenz",
+        inMeetingTintOrange: "Orange",
+        inMeetingTintGreen: "Grün",
+        inMeetingTintBlue: "Blau",
+        inMeetingTintPurple: "Lila",
+        inMeetingTintPink: "Pink",
+        inMeetingTintNone: "Keine Farbe",
         actionFailed: "Konnte nicht abgeschlossen werden."
     )
 
@@ -395,6 +491,18 @@ extension QuickToggleFeatureStrings {
         screenSaverCaption: "Démarre aussitôt, sur tous les écrans.",
         hourlyBeepTitle: "Bip à chaque heure",
         hourlyBeepCaption: "Joue un bip bref au début de chaque heure.",
+        inMeetingTitle: "En réunion",
+        inMeetingCaption: "Vous identifie comme étant actuellement en réunion.",
+        inMeetingInterval: "Intervalle",
+        inMeetingActiveIcon: "Icône active",
+        inMeetingActiveIconColor: "Couleur de l’icône active",
+        inMeetingIconOpacity: "Transparence de l’icône",
+        inMeetingTintOrange: "Orange",
+        inMeetingTintGreen: "Vert",
+        inMeetingTintBlue: "Bleu",
+        inMeetingTintPurple: "Violet",
+        inMeetingTintPink: "Rose",
+        inMeetingTintNone: "Sans couleur",
         actionFailed: "Impossible de terminer."
     )
 
@@ -436,6 +544,18 @@ extension QuickToggleFeatureStrings {
         screenSaverCaption: "Parte subito, su tutti gli schermi.",
         hourlyBeepTitle: "Bip a ogni ora",
         hourlyBeepCaption: "Riproduce un breve bip all’inizio di ogni ora.",
+        inMeetingTitle: "In riunione",
+        inMeetingCaption: "Ti identifica come attualmente in riunione.",
+        inMeetingInterval: "Intervallo",
+        inMeetingActiveIcon: "Icona attiva",
+        inMeetingActiveIconColor: "Colore icona attiva",
+        inMeetingIconOpacity: "Trasparenza dell’icona",
+        inMeetingTintOrange: "Arancione",
+        inMeetingTintGreen: "Verde",
+        inMeetingTintBlue: "Blu",
+        inMeetingTintPurple: "Viola",
+        inMeetingTintPink: "Rosa",
+        inMeetingTintNone: "Nessun colore",
         actionFailed: "Impossibile completare."
     )
 
@@ -477,6 +597,18 @@ extension QuickToggleFeatureStrings {
         screenSaverCaption: "すべてのディスプレイですぐに始まります。",
         hourlyBeepTitle: "毎時ちょうどにビープ",
         hourlyBeepCaption: "毎時0分に短いビープ音を再生します。",
+        inMeetingTitle: "会議中",
+        inMeetingCaption: "あなたが現在会議中であることを示します。",
+        inMeetingInterval: "間隔",
+        inMeetingActiveIcon: "使用中のアイコン",
+        inMeetingActiveIconColor: "アクティブ時のアイコン色",
+        inMeetingIconOpacity: "アイコンの透明度",
+        inMeetingTintOrange: "オレンジ",
+        inMeetingTintGreen: "緑",
+        inMeetingTintBlue: "青",
+        inMeetingTintPurple: "紫",
+        inMeetingTintPink: "ピンク",
+        inMeetingTintNone: "色なし",
         actionFailed: "完了できませんでした。"
     )
 
@@ -518,6 +650,18 @@ extension QuickToggleFeatureStrings {
         screenSaverCaption: "모든 디스플레이에서 바로 시작됩니다.",
         hourlyBeepTitle: "정각 알림음",
         hourlyBeepCaption: "매시 정각에 짧은 알림음을 재생합니다.",
+        inMeetingTitle: "회의 중",
+        inMeetingCaption: "현재 회의 중임을 나타냅니다.",
+        inMeetingInterval: "간격",
+        inMeetingActiveIcon: "활성 아이콘",
+        inMeetingActiveIconColor: "활성 상태 아이콘 색상",
+        inMeetingIconOpacity: "아이콘 투명도",
+        inMeetingTintOrange: "주황색",
+        inMeetingTintGreen: "녹색",
+        inMeetingTintBlue: "파란색",
+        inMeetingTintPurple: "보라색",
+        inMeetingTintPink: "분홍색",
+        inMeetingTintNone: "없음",
         actionFailed: "완료할 수 없습니다."
     )
 
@@ -559,6 +703,18 @@ extension QuickToggleFeatureStrings {
         screenSaverCaption: "在所有显示器上立即启动。",
         hourlyBeepTitle: "整点蜂鸣",
         hourlyBeepCaption: "每小时整点播放一声短促的蜂鸣声。",
+        inMeetingTitle: "会议中",
+        inMeetingCaption: "将你标识为正在会议中。",
+        inMeetingInterval: "间隔",
+        inMeetingActiveIcon: "活跃图标",
+        inMeetingActiveIconColor: "启用时图标颜色",
+        inMeetingIconOpacity: "图标透明度",
+        inMeetingTintOrange: "橙色",
+        inMeetingTintGreen: "绿色",
+        inMeetingTintBlue: "蓝色",
+        inMeetingTintPurple: "紫色",
+        inMeetingTintPink: "粉色",
+        inMeetingTintNone: "无颜色",
         actionFailed: "无法完成。"
     )
 
@@ -600,6 +756,18 @@ extension QuickToggleFeatureStrings {
         screenSaverCaption: "在所有顯示器上立即啟動。",
         hourlyBeepTitle: "整點嗶聲",
         hourlyBeepCaption: "每小時整點播放一聲短促的嗶聲。",
+        inMeetingTitle: "會議中",
+        inMeetingCaption: "將你標識為正在會議中。",
+        inMeetingInterval: "間隔",
+        inMeetingActiveIcon: "使用中的圖示",
+        inMeetingActiveIconColor: "開啟時圖示顏色",
+        inMeetingIconOpacity: "圖示透明度",
+        inMeetingTintOrange: "橘色",
+        inMeetingTintGreen: "綠色",
+        inMeetingTintBlue: "藍色",
+        inMeetingTintPurple: "紫色",
+        inMeetingTintPink: "粉紅色",
+        inMeetingTintNone: "無色彩",
         actionFailed: "無法完成。"
     )
 
@@ -641,6 +809,18 @@ extension QuickToggleFeatureStrings {
         screenSaverCaption: "在所有顯示器上立即啟動。",
         hourlyBeepTitle: "整點嗶聲",
         hourlyBeepCaption: "每小時整點播放一聲短促的嗶聲。",
+        inMeetingTitle: "會議中",
+        inMeetingCaption: "將你標識為正在會議中。",
+        inMeetingInterval: "間隔",
+        inMeetingActiveIcon: "使用中的圖示",
+        inMeetingActiveIconColor: "啟用時圖示顏色",
+        inMeetingIconOpacity: "圖示透明度",
+        inMeetingTintOrange: "橙色",
+        inMeetingTintGreen: "綠色",
+        inMeetingTintBlue: "藍色",
+        inMeetingTintPurple: "紫色",
+        inMeetingTintPink: "粉紅色",
+        inMeetingTintNone: "沒有顏色",
         actionFailed: "無法完成。"
     )
     static let uk = QuickToggleFeatureStrings(
@@ -681,6 +861,18 @@ extension QuickToggleFeatureStrings {
         screenSaverCaption: "Запускається одразу, на кожному дисплеї.",
         hourlyBeepTitle: "Сигнал щогодини",
         hourlyBeepCaption: "Відтворює короткий сигнал на початку кожної години.",
+        inMeetingTitle: "На нараді",
+        inMeetingCaption: "Позначає вас як таких, що зараз на нараді.",
+        inMeetingInterval: "Інтервал",
+        inMeetingActiveIcon: "Активний значок",
+        inMeetingActiveIconColor: "Колір активного значка",
+        inMeetingIconOpacity: "Прозорість значка",
+        inMeetingTintOrange: "Помаранчевий",
+        inMeetingTintGreen: "Зелений",
+        inMeetingTintBlue: "Синій",
+        inMeetingTintPurple: "Фіолетовий",
+        inMeetingTintPink: "Рожевий",
+        inMeetingTintNone: "Без кольору",
         actionFailed: "Не вдалося завершити."
     )
 }
