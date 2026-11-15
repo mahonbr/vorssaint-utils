@@ -413,6 +413,7 @@ if (( TEST )); then
         Sources/Vorssaint/Core/FeatureStrings.swift
         Sources/Vorssaint/Core/KillProcessStrings.swift
         Sources/Vorssaint/Core/PortManagerStrings.swift
+        Sources/Vorssaint/Core/ScheduledTasksStrings.swift
         Sources/Vorssaint/Core/WhatsAppDownloadStrings.swift
         Sources/Vorssaint/Core/WhatsAppOrganizerStrings.swift
         Sources/Vorssaint/Core/ReleaseNotes.swift
@@ -576,6 +577,9 @@ if (( TEST )); then
         Sources/Vorssaint/Services/Cleaner/CleanerSupport.swift
         Sources/Vorssaint/Services/Cleaner/CleanerPolicy.swift
         Sources/Vorssaint/Services/Cleaner/CleanerSchedule.swift
+        Sources/Vorssaint/Services/ScheduledTasks/ScheduledTask.swift
+        Sources/Vorssaint/Services/ScheduledTasks/ScheduledTaskSchedule.swift
+        Sources/Vorssaint/Services/ScheduledTasks/ScheduledTasksModel.swift
         Sources/Vorssaint/Services/Uninstall/UninstallerSupport.swift
         Sources/Vorssaint/Services/ManagedDownloads/WhatsAppDownloadSupport.swift
         Sources/Vorssaint/Core/SecureInputSupport.swift

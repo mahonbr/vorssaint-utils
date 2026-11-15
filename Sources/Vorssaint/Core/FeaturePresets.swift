@@ -157,6 +157,10 @@ extension AppFeature {
             return AppUpdatesSupport.CheckFrequency.sanitized(
                 UserDefaults.standard.string(forKey: DefaultsKey.appUpdatesCheckFrequency)) == .off
                 ? .idle : .periodic
+        case .scheduledTasks:
+            // Nothing is armed until the schedule's own switch is on.
+            return UserDefaults.standard.bool(forKey: DefaultsKey.scheduledTasksEnabled)
+                ? .periodic : .idle
         }
     }
 }

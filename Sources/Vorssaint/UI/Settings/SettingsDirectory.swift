@@ -393,6 +393,12 @@ enum SettingsDirectory {
                                                  FeatureStrings.commandBar(language).searchPlaceholder,
                                                  FeatureStrings.commandBar(language).appCenterTitle,
                                                  FeatureStrings.commandBar(language).appAliasLabel]),
+                SettingsDirectoryItem(page: .scheduledTasks,
+                                      title: FeatureStrings.scheduledTasks(language).title,
+                                      icon: "clock.arrow.circlepath",
+                                      keywords: [FeatureStrings.scheduledTasks(language).panelCaption,
+                                                 FeatureStrings.scheduledTasks(language).introTitle,
+                                                 "cron", "launchd", "schedule", "shell", "command"]),
                 SettingsDirectoryItem(page: .quickTools, title: s.quickToolsTab, icon: "wand.and.rays",
                                        featureKeywords: [
                                         (.quickLauncher, [s.launcherName]),

@@ -6,6 +6,9 @@ All notable changes to this project are documented here. The format follows
 
 ## [Unreleased]
 
+### Added
+- Scheduled tasks run shell commands at launch, every few minutes, when the Mac is idle, or on a daily, weekly or monthly schedule. Each task keeps its own shell, catch-up choice, switch and last-run status. Settings → Scheduled tasks.
+
 ## [3.4.3] - 2026-10-29
 
 ### Summary

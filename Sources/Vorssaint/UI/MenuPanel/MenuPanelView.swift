@@ -556,7 +556,7 @@ private enum UtilityPanelItem: String, PanelOrderItem, Identifiable {
     // are migrated once without disturbing the rest of the user's layout.
     case screenshot, quickLauncher, appUpdates, cleaner, homebrew, media, clipboard, windowLayout,
          uninstaller, cleanURL, cleaning, screenOCR, colorPicker, cameraPreview, scratchpad,
-         commandBar, screenRecorder, portManager
+         commandBar, screenRecorder, portManager, scheduledTasks
 
     var id: String { rawValue }
 
@@ -582,6 +582,7 @@ private enum UtilityPanelItem: String, PanelOrderItem, Identifiable {
         case .scratchpad: return .scratchpad
         case .commandBar: return .commandBar
         case .portManager: return .portManager
+        case .scheduledTasks: return .scheduledTasks
         }
     }
 }
@@ -618,6 +619,7 @@ struct UtilitiesSection: View {
     @AppStorage(DefaultsKey.panelUtilityCommandBar) private var showCommandBar = true
     @AppStorage(DefaultsKey.panelUtilityScreenRecorder) private var showScreenRecorder = true
     @AppStorage(DefaultsKey.panelUtilityPortManager) private var showPortManager = true
+    @AppStorage(DefaultsKey.panelUtilityScheduledTasks) private var showScheduledTasks = true
     @ObservedObject private var recorder = ScreenRecorderService.shared
     @AppStorage(DefaultsKey.clipboardHistoryEnabled) private var clipboardEnabled = false
     @AppStorage(DefaultsKey.panelUtilityOrder) private var utilityOrderRaw = ""
@@ -782,6 +784,7 @@ struct UtilitiesSection: View {
         case .screenshot: return showScreenshot
         case .screenRecorder: return showScreenRecorder
         case .portManager: return showPortManager
+        case .scheduledTasks: return showScheduledTasks
         }
     }
 
@@ -1026,6 +1029,19 @@ struct UtilitiesSection: View {
                                 showsDragHandle: true,
                                 visibility: $showPortManager,
                                 action: { showPortManagerPanel = true })
+        case .scheduledTasks:
+            UtilityActionButton(title: FeatureStrings.scheduledTasks(l10n.language).title,
+                                caption: FeatureStrings.scheduledTasks(l10n.language).panelCaption,
+                                systemImage: "clock.arrow.circlepath",
+                                isEditing: editing,
+                                showsDragHandle: true,
+                                visibility: $showScheduledTasks,
+                                action: {
+                                    appDelegate()?.closePopover()
+                                    SettingsRouter.shared.request(
+                                        FeatureSettingsDestination(.scheduledTasks))
+                                    appDelegate()?.openSettingsWindow()
+                                })
         }
     }
 

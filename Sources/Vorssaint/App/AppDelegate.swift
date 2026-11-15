@@ -353,6 +353,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSPopoverDelegate, NSW
         AudioInputDeviceManager.shared.stop()
         // Flushes any scratchpad edit still inside the save debounce.
         ScratchpadService.shared.suspend()
+        // A stopped task can still write its outcome, so the schedule must not
+        // re-arm on the way out.
+        if AppFeature.scheduledTasks.isAvailable {
+            ScheduledTasksScheduler.shared.stop(terminateRunning: true)
+        }
         // Every macOS shortcut a feature took over goes back now, whichever
         // feature held it; not all of them suspend here.
         SystemShortcutTakeover.restoreAll()

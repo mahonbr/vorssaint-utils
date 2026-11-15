@@ -198,6 +198,7 @@ struct MetricsTests {
                 CleanerScanFlowTests.run(suite)
                 CleanerLayoutTests.run(suite)
             }),
+            ("scheduled-tasks", { ScheduledTasksTests.run(suite) }),
             ("uninstaller", {
                 HomebrewOwnershipTests.run(suite)
                 UninstallerFlowTests.run(suite)
